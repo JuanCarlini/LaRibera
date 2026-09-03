@@ -91,13 +91,23 @@ export const ubicacion = {
     { titulo: "Río Paraná", detalle: "El loteo se apoya sobre la ribera" },
   ],
   mapa: {
-    // TODO: cargar el centro del plano de mensura y poner `preciso: true`.
-    // Mientras sea false no se dibuja ninguna marca sobre el mapa: el mapa
-    // ubica la zona y el predio se ve en la vista satelital de las piezas.
-    centro: { lat: -33.0246, lng: -60.6289 },
-    zoom: 13,
-    preciso: false,
+    // Coordenadas del predio confirmadas por el cliente (03/09/2026).
+    centro: { lat: -33.0261908, lng: -60.6073826 },
+    zoom: 16,
+    preciso: true,
   },
+};
+
+/**
+ * Quién está detrás del proyecto. Los logos van en /public/img cuando las
+ * empresas los entreguen; mientras tanto se muestra el nombre compuesto.
+ */
+export const actores = {
+  eyebrow: "Quiénes lo hacen",
+  items: [
+    { rol: "Desarrolla", nombre: "Mutual 18 de Julio", logo: null as string | null },
+    { rol: "Comercializa", nombre: "Qala Desarrollos", logo: null as string | null },
+  ],
 };
 
 export const vida = {

@@ -75,7 +75,9 @@ export function Mapa() {
     cargarSdk(CLAVE)
       .then(() => {
         if (!vivo || !contenedor.current) return;
-        mapa.current = new window.google.maps.Map(contenedor.current, {
+        const g = window.google.maps;
+
+        mapa.current = new g.Map(contenedor.current, {
           center: centro,
           zoom,
           styles: estilo,
@@ -83,8 +85,30 @@ export function Mapa() {
           zoomControl: true,
           gestureHandling: "cooperative",
         });
-        // No dibujamos nada encima: sin el plano de mensura, cualquier marca
-        // sobre el mapa sería inventada. El predio se ve en la vista satelital.
+
+        // Sólo marcamos cuando la ubicación está confirmada. Usamos el Marker
+        // clásico —y no AdvancedMarker— porque éste exige un mapId de Cloud,
+        // que anula el estilo JSON con la paleta de marca.
+        if (preciso) {
+          new g.Marker({
+            map: mapa.current,
+            position: centro,
+            title: proyecto.nombre,
+            icon: {
+              url:
+                "data:image/svg+xml;charset=UTF-8," +
+                encodeURIComponent(
+                  `<svg xmlns="http://www.w3.org/2000/svg" width="42" height="54" viewBox="0 0 42 54">
+                     <path d="M21 53C21 53 39 32.6 39 20.6A18 18 0 1 0 3 20.6C3 32.6 21 53 21 53Z"
+                           fill="#fc6011" stroke="#e6e6db" stroke-width="3"/>
+                     <circle cx="21" cy="20" r="6.5" fill="#e6e6db"/>
+                   </svg>`,
+                ),
+              scaledSize: new g.Size(42, 54),
+              anchor: new g.Point(21, 54),
+            },
+          });
+        }
       })
       .catch(() => vivo && setError(true));
 

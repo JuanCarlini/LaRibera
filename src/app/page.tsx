@@ -6,6 +6,7 @@ import { Servicios } from "@/components/Servicios";
 import { Ubicacion } from "@/components/Ubicacion";
 import { Vida } from "@/components/Vida";
 import { Financiacion } from "@/components/Financiacion";
+import { Actores } from "@/components/Actores";
 import { Contacto } from "@/components/Contacto";
 import { Footer } from "@/components/Footer";
 import { RevealProvider } from "@/components/Reveal";
@@ -22,6 +23,7 @@ export default function Home() {
         <Ubicacion />
         <Vida />
         <Financiacion />
+        <Actores />
         <Contacto />
       </main>
       <Footer />

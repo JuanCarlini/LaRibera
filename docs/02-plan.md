@@ -29,7 +29,7 @@ la calidez de las piezas de La Ribera.
 | — | Cinta de datos duros (marquee) | ✅ maqueta |
 | 01 | El proyecto: relato + contadores (269 / 200–220 m² / 4 servicios) | ✅ maqueta |
 | 02 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
-| 03 | Ubicación: satelital con el predio marcado + accesos | ⚠️ faltan distancias reales |
+| 03 | Ubicación: Google Maps interactivo + accesos | ⚠️ faltan coordenadas y clave de API |
 | 04 | La vida acá: galería con los copies de campaña | ✅ maqueta |
 | 05 | Financiación: statement + CTA | ⚠️ faltan valores y condiciones |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |
@@ -54,6 +54,22 @@ Necesitamos el archivo vectorial original del manual de marca.
 **Tipografía.** Figtree aproxima la grotesca de las piezas. Si el manual define otra
 tipografía, se cambia en un solo lugar (`src/app/layout.tsx`).
 
+## Mapa de la sección Ubicación
+
+Usa la Maps JavaScript API de Google, con el estilo del mapa derivado de los tokens de
+marca y un círculo naranja marcando el área en lugar de un pin: mientras no tengamos el
+plano de mensura, un punto exacto sería inventado.
+
+El componente se activa solo si existe `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. Sin esa variable
+cae a la satelital de las piezas, así que la página nunca queda rota. El botón "Cómo llegar"
+abre Google Maps y funciona en los dos casos.
+
+Para encenderlo: crear la clave en Google Cloud con la Maps JavaScript API habilitada,
+restringirla por dominio, y cargarla como variable de entorno en Vercel. Las coordenadas y
+el radio están en `ubicacion.mapa` dentro de `src/content/site.ts`; cuando se carguen las
+reales hay que poner `preciso: true` para que desaparezca el cartel de "ubicación
+aproximada".
+
 ## Qué necesitamos del cliente
 
 Bloqueantes para publicar:
@@ -68,7 +84,8 @@ Bloqueantes para publicar:
 Importantes, no bloqueantes:
 
 6. Fotos y renders **sin tipografía encima**, y el masterplan del loteo.
-7. Distancias y accesos verificados (a VGG, a Rosario, a la autopista).
+7. Distancias y accesos verificados (a VGG, a Rosario, a la autopista), y las coordenadas
+   del predio para el mapa.
 8. Logo vectorial y manual de marca.
 9. Definir si se muestra disponibilidad por lote o sólo un formulario general.
 

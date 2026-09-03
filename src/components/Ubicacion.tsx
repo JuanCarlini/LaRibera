@@ -1,22 +1,13 @@
-import Image from "next/image";
-import { Eyebrow } from "./ui";
+import { Eyebrow, Flecha } from "./ui";
+import { Mapa, comoLlegarHref } from "./Mapa";
 import { ubicacion as s } from "@/content/site";
 
 export function Ubicacion() {
   return (
     <section id="ubicacion" className="bg-crema py-24 md:py-32">
       <div className="contenedor grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-        <div
-          className="relative aspect-4/3 overflow-hidden rounded-3xl bg-verde/10 lg:order-2"
-          data-reveal
-        >
-          <Image
-            src="/img/mapa-ubicacion.webp"
-            alt="Vista satelital de Villa Gobernador Gálvez con el predio de La Ribera marcado"
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-          />
+        <div className="lg:order-2" data-reveal>
+          <Mapa />
         </div>
 
         <div className="lg:order-1">
@@ -47,6 +38,17 @@ export function Ubicacion() {
               </div>
             ))}
           </dl>
+
+          <a
+            href={comoLlegarHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-2 rounded-full border-2 border-verde/25 px-6 py-3 text-sm font-bold text-verde transition-colors hover:border-verde hover:bg-verde hover:text-crema"
+            data-reveal
+          >
+            Cómo llegar
+            <Flecha />
+          </a>
         </div>
       </div>
     </section>

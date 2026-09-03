@@ -90,6 +90,16 @@ export const ubicacion = {
     { titulo: "Rosario", detalle: "Acceso directo por la costa" },
     { titulo: "Río Paraná", detalle: "El loteo se apoya sobre la ribera" },
   ],
+  mapa: {
+    // TODO: cargar el centro y el radio del plano de mensura. Mientras `preciso`
+    // sea false el mapa muestra un área aproximada y lo aclara en pantalla, para
+    // no marcar un punto exacto que todavía no tenemos confirmado.
+    centro: { lat: -33.0246, lng: -60.6289 },
+    zoom: 14,
+    radioMetros: 700,
+    preciso: false,
+    etiqueta: "La Ribera",
+  },
 };
 
 export const vida = {

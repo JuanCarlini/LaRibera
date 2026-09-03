@@ -78,6 +78,13 @@ export function Mapa() {
     if (!CLAVE || !contenedor.current) return;
     let vivo = true;
 
+    // Google avisa por acá cuando la clave no autoriza este dominio, venció o
+    // le falta facturación. Sin esto pinta su propio cartel de error adentro
+    // del marco; con esto caemos al plano, que al menos es contenido útil.
+    (window as any).gm_authFailure = () => {
+      if (vivo) setError(true);
+    };
+
     cargarSdk(CLAVE)
       .then(() => {
         if (!vivo || !contenedor.current) return;

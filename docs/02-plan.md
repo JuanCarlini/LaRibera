@@ -45,7 +45,7 @@ la calidez de las piezas de La Ribera.
 | 01 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
 | 02 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
 | 03 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
-| 04 | La vida acá: carrusel de cards que avanza con el scroll | ✅ con renders reales |
+| 04 | La vida acá: cards que escalan al pasar por el centro | ✅ con renders reales |
 | 05 | Financiación: statement + CTA | ⚠️ faltan valores y condiciones |
 | — | Quiénes lo hacen: desarrolladora y comercializadora | ✅ con logos |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |
@@ -54,11 +54,14 @@ Todo el texto vive en `src/content/site.ts`. Cambiar un copy no requiere tocar c
 
 ## Decisiones de diseño que se apartan de las piezas
 
-**Carrusel de "La vida acá".** La sección queda fijada y el riel de cards se desplaza en
-horizontal según el progreso del scroll. El alto de la sección se calcula después de montar
-como `innerHeight + recorrido del riel`, así un píxel de scroll mueve un píxel de card en
-cualquier pantalla: con alto fijo, en desktop se scrolleaba de más para mover muy poco.
-Con `prefers-reduced-motion` no se fija nada y el riel se recorre a dedo con scroll-snap.
+**Cards de "La vida acá".** Cada card ocupa una pantalla y se desliza en vertical con la
+página, escalando de 0,86 (mobile) o 0,74 (desktop) hasta 1 al pasar por el centro del
+viewport, y volviendo a achicarse al salir. Es el mismo mecanismo que usa estudiolak.com.ar
+en su sección de proyectos. Nada se desplaza en horizontal.
+
+El encabezado va en flujo normal y no fijo: al fijarlo, el titular asomaba por detrás de las
+cards —que son más angostas que el viewport— y se leía como un error de maquetado.
+Con `prefers-reduced-motion` no se aplica ninguna transformación.
 
 **Imágenes.** Las de la maqueta inicial eran recortes de las piezas de RRSS, que son
 generadas. Ya están reemplazadas por los renders del proyecto que vinieron en la

@@ -55,15 +55,17 @@ function cargarSdk(clave: string) {
   return cargando;
 }
 
-const { centro, zoom, radioMetros, preciso, etiqueta } = ubicacion.mapa;
+const { centro, zoom, preciso } = ubicacion.mapa;
 
 /** Abre las indicaciones en Google Maps. Funciona con o sin clave de API. */
 export const comoLlegarHref = `https://www.google.com/maps/dir/?api=1&destination=${centro.lat},${centro.lng}`;
 
+const marco = "relative aspect-4/3 overflow-hidden rounded-3xl bg-verde/10";
+
 export function Mapa() {
   const contenedor = useRef<HTMLDivElement>(null);
   const mapa = useRef<any>(null);
-  const [vista, setVista] = useState<"mapa" | "satelite">("mapa");
+  const [vista, setVista] = useState<"zona" | "predio">("zona");
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -73,9 +75,7 @@ export function Mapa() {
     cargarSdk(CLAVE)
       .then(() => {
         if (!vivo || !contenedor.current) return;
-        const g = window.google.maps;
-
-        mapa.current = new g.Map(contenedor.current, {
+        mapa.current = new window.google.maps.Map(contenedor.current, {
           center: centro,
           zoom,
           styles: estilo,
@@ -83,18 +83,8 @@ export function Mapa() {
           zoomControl: true,
           gestureHandling: "cooperative",
         });
-
-        // Círculo en lugar de pin: comunica "esta zona" y no un punto exacto.
-        new g.Circle({
-          map: mapa.current,
-          center: centro,
-          radius: radioMetros,
-          strokeColor: "#fc6011",
-          strokeOpacity: 0.9,
-          strokeWeight: 2,
-          fillColor: "#99c561",
-          fillOpacity: 0.35,
-        });
+        // No dibujamos nada encima: sin el plano de mensura, cualquier marca
+        // sobre el mapa sería inventada. El predio se ve en la vista satelital.
       })
       .catch(() => vivo && setError(true));
 
@@ -103,55 +93,81 @@ export function Mapa() {
     };
   }, []);
 
-  // El estilo custom sólo aplica al mapa de calles; en satelital se saca.
-  useEffect(() => {
-    if (!mapa.current) return;
-    mapa.current.setMapTypeId(vista === "mapa" ? "roadmap" : "hybrid");
-    mapa.current.setOptions({ styles: vista === "mapa" ? estilo : null });
-  }, [vista]);
-
-  if (!CLAVE || error) return <MapaEstatico />;
+  if (!CLAVE || error) {
+    return (
+      <div>
+        <div className={marco}>
+          <Predio />
+        </div>
+        <Aclaracion />
+      </div>
+    );
+  }
 
   return (
-    <div className="relative aspect-4/3 overflow-hidden rounded-3xl bg-verde/10">
-      <div ref={contenedor} className="absolute inset-0" />
+    <div>
+      <div className={marco}>
+        {/* Las dos vistas quedan montadas y se alternan con opacidad, así el
+            mapa no necesita reinicializarse ni recalcular su tamaño. */}
+        <div
+          ref={contenedor}
+          className={`absolute inset-0 transition-opacity duration-300 ${
+            vista === "zona" ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        />
+        <div
+          className={`absolute inset-0 transition-opacity duration-300 ${
+            vista === "predio" ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          aria-hidden={vista !== "predio"}
+        >
+          <Predio />
+        </div>
 
-      <div className="absolute top-4 left-4 flex overflow-hidden rounded-full bg-crema/95 p-1 shadow-sm backdrop-blur">
-        {(["mapa", "satelite"] as const).map((v) => (
-          <button
-            key={v}
-            type="button"
-            onClick={() => setVista(v)}
-            aria-pressed={vista === v}
-            className={`rounded-full px-4 py-1.5 text-xs font-bold tracking-wide capitalize transition-colors ${
-              vista === v ? "bg-verde text-crema" : "text-verde/70 hover:text-verde"
-            }`}
-          >
-            {v === "mapa" ? "Mapa" : "Satélite"}
-          </button>
-        ))}
+        <div className="absolute top-4 left-4 z-10 flex rounded-full bg-crema/95 p-1 shadow-sm backdrop-blur">
+          {(
+            [
+              ["zona", "La zona"],
+              ["predio", "El predio"],
+            ] as const
+          ).map(([v, texto]) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setVista(v)}
+              aria-pressed={vista === v}
+              className={`rounded-full px-4 py-1.5 text-xs font-bold tracking-wide transition-colors ${
+                vista === v ? "bg-verde text-crema" : "text-verde/70 hover:text-verde"
+              }`}
+            >
+              {texto}
+            </button>
+          ))}
+        </div>
       </div>
-
-      {!preciso && (
-        <p className="absolute right-4 bottom-4 left-4 rounded-xl bg-crema/95 px-3 py-2 text-xs text-verde/70 backdrop-blur">
-          Ubicación aproximada. El plano definitivo del loteo se publica al lanzamiento.
-        </p>
-      )}
+      <Aclaracion />
     </div>
   );
 }
 
-/** Sin clave configurada mostramos la satelital de las piezas, que ya marca el predio. */
-function MapaEstatico() {
+function Predio() {
   return (
-    <div className="relative aspect-4/3 overflow-hidden rounded-3xl bg-verde/10">
-      <Image
-        src="/img/mapa-ubicacion.webp"
-        alt={`Vista satelital de ${proyecto.ubicacion} con el predio de ${etiqueta} marcado`}
-        fill
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover"
-      />
-    </div>
+    <Image
+      src="/img/mapa-ubicacion.webp"
+      alt={`Vista satelital de ${proyecto.ubicacion} con el predio de La Ribera marcado`}
+      fill
+      sizes="(min-width: 1024px) 50vw, 100vw"
+      className="object-cover"
+    />
+  );
+}
+
+/** Fuera del mapa: tapar la atribución de Google va contra sus condiciones. */
+function Aclaracion() {
+  if (preciso) return null;
+  return (
+    <p className="mt-3 text-xs text-verde/55">
+      El plano definitivo del loteo se publica al lanzamiento.
+    </p>
   );
 }

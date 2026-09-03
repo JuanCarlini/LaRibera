@@ -19,10 +19,10 @@ export default function Home() {
         <Hero />
         <Proyecto />
         <Ticker />
+        <Financiacion />
         <Servicios />
         <Ubicacion />
         <Vida />
-        <Financiacion />
         <Actores />
         <Contacto />
       </main>

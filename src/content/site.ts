@@ -19,6 +19,7 @@ export const mensajeWhatsapp =
 
 export const nav = [
   { href: "#proyecto", label: "El proyecto" },
+  { href: "#financiacion", label: "Financiación" },
   { href: "#servicios", label: "Servicios" },
   { href: "#ubicacion", label: "Ubicación" },
   { href: "#vida", label: "La vida acá" },
@@ -67,7 +68,7 @@ export const proyectoSeccion = {
 };
 
 export const servicios = {
-  eyebrow: "02 / Servicios",
+  eyebrow: "03 / Servicios",
   titulo: ["Todo lo que necesitás,", "en un solo lugar"],
   bajada:
     "La Ribera contará con la infraestructura completa de red, para que puedas pensar en tu futuro sin resolverlo por tu cuenta.",
@@ -80,7 +81,7 @@ export const servicios = {
 };
 
 export const ubicacion = {
-  eyebrow: "03 / Ubicación",
+  eyebrow: "04 / Ubicación",
   titulo: ["Loteo costero de Villa", "Gobernador Gálvez"],
   bajada:
     "Ubicado sobre la vera del río Paraná, a minutos del centro de VGG y con acceso directo a Rosario.",
@@ -127,7 +128,7 @@ export const actores = {
 };
 
 export const vida = {
-  eyebrow: "04 / La vida acá",
+  eyebrow: "05 / La vida acá",
   titulo: ["Un lugar para crecer hoy.", "Un hogar para recordar mañana."],
   bajada:
     "El barrio no es sólo el lote. Es todo lo que pasa alrededor, todos los días.",
@@ -169,12 +170,53 @@ export const vida = {
 };
 
 export const financiacion = {
-  eyebrow: "05 / Financiación",
+  eyebrow: "02 / Financiación",
   titulo: ["El sueño de la casa propia", "ya no es una idea lejana."],
   bajada:
-    "Consultá por los planes de financiación disponibles para la etapa de lanzamiento.",
-  // TODO: cargar valores, anticipo, cantidad de cuotas y vigencia cuando el cliente los confirme.
-  cta: "Conocé la financiación",
+    "Elegí tu lote de la Manzana C, decinos cuánto podés entregar y mirá cómo queda tu cuota.",
+  cta: "Quiero reservar este lote",
+
+  /**
+   * Precios de "La Ribera COMERCIAL Lotes Manzana C.xlsx".
+   * Son 39 lotes (70 al 108) en tres valores según orientación y esquina.
+   * TODO: al abrir otras manzanas, sumar sus tramos acá.
+   */
+  lotes: [
+    { precio: 14900, m2: 211.64, disponibles: 32, detalle: "Frentes norte y sur" },
+    { precio: 15400, m2: 220.44, disponibles: 4, detalle: "Frentes este y oeste" },
+    { precio: 16400, m2: 220.44, disponibles: 3, detalle: "Lotes en esquina" },
+  ],
+
+  anticipoMinimo: 6900,
+  plazos: [6, 12, 18, 24],
+  notaPlazo:
+    "El plazo máximo de financiación es de 24 meses, el mismo tiempo que dura la obra del loteo.",
+
+  /**
+   * Cotización usada para pesificar. Se pide en vivo a dolarapi.com y, si falla,
+   * se cae al valor de referencia de abajo.
+   * TODO: confirmar con Comercial qué cotización rige en el contrato.
+   */
+  cotizacion: {
+    casa: "blue" as const,
+    nombre: "Dólar blue",
+    respaldo: 1545,
+    respaldoFecha: "3 de septiembre de 2026",
+  },
+
+  /**
+   * Variación mensual del índice CAC (CAMARCO). No hay API pública, así que se
+   * carga a mano cada mes. Con `variacion: null` la calculadora explica el
+   * ajuste sin dar un número, que es preferible a publicar uno desactualizado.
+   * TODO: cargar la última variación informada y su período.
+   */
+  cac: {
+    variacion: null as number | null,
+    periodo: "",
+  },
+
+  legales:
+    "Simulación orientativa: no constituye oferta comercial ni obligación de financiación. Los montos definitivos, el anticipo y las condiciones de cada operación quedan sujetos a evaluación comercial. Las cuotas se abonan en pesos y se actualizan según la variación del índice de la Cámara Argentina de la Construcción (CAC). La cotización del dólar es de referencia y varía a diario.",
 };
 
 export const contacto = {

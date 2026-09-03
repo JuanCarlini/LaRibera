@@ -43,10 +43,10 @@ la calidez de las piezas de La Ribera.
 | — | Hero: aérea + "Acá empieza tu futuro" + 2 CTA | ✅ maqueta |
 | — | Cinta de datos duros (marquee) | ✅ maqueta |
 | 01 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
-| 02 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
-| 03 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
-| 04 | La vida acá: cards que escalan al pasar por el centro | ✅ con renders reales |
-| 05 | Financiación: statement + CTA | ⚠️ faltan valores y condiciones |
+| 02 | Financiación: calculadora de plan de pago | ✅ con precios reales, ⚠️ falta CAC |
+| 03 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
+| 04 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
+| 05 | La vida acá: cards apiladas con sticky | ✅ con renders reales |
 | — | Quiénes lo hacen: desarrolladora y comercializadora | ✅ con logos |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |
 
@@ -102,11 +102,32 @@ La clave es pública por diseño —`NEXT_PUBLIC_` la inlinea en el bundle, y Ma
 necesita en el navegador—, así que lo que la protege es la restricción por dominio en
 Google Cloud, no el secreto.
 
+## Calculadora de financiación
+
+Los precios salen de `La Ribera COMERCIAL Lotes Manzana C.xlsx`: 39 lotes de la Manzana C
+en tres tramos —USD 14.900 (32 lotes de 211,64 m²), USD 15.400 (4 de 220,44 m²) y
+USD 16.400 (3 esquinas de 220,44 m²)—. Viven en `financiacion.lotes` dentro de
+`src/content/site.ts`; al abrir otras manzanas se suman ahí.
+
+El cálculo es directo: cuota = (precio − anticipo) / plazo. No hay interés compuesto ni
+proyección de ajustes futuros, y la simulación lo aclara.
+
+**Cotización.** Se pide en vivo a `dolarapi.com`, sin clave. Si la API no responde cae al
+valor de respaldo del contenido, y el texto cambia de "cotización del" a "valor de
+referencia al", para no hacer pasar un número viejo por actual. La casa está en
+`financiacion.cotizacion.casa`: hoy es `blue` y **hay que confirmar con Comercial cuál rige
+en el contrato**.
+
+**Índice CAC.** CAMARCO no publica API, así que la variación se carga a mano en
+`financiacion.cac`. Con `variacion: null` la calculadora explica el ajuste sin dar un
+número, que es preferible a publicar uno desactualizado.
+
 ## Qué necesitamos del cliente
 
 Bloqueantes para publicar:
 
-1. **Precios y financiación** — valor del lote, anticipo, cuotas, ajuste, vigencia.
+1. **Última variación del índice CAC** y su período, para completar la calculadora, y
+   confirmación de qué cotización del dólar rige para pesificar las cuotas.
 2. **Destino de los leads** — CRM, casilla de mail o planilla. Hoy el formulario abre
    WhatsApp con los datos cargados; funciona, pero no deja registro.
 3. **Teléfono y mail definitivos** — confirmar el `+54 9 3385 43-7168`.

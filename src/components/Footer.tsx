@@ -7,7 +7,7 @@ export function Footer() {
       <div className="contenedor">
         <div className="flex flex-wrap items-start justify-between gap-10">
           <div>
-            <Logo className="text-2xl text-lima" />
+            <Logo variante="lima" alto={26} />
             <p className="mt-4 text-sm">{proyecto.bajada}</p>
             <p className="text-sm">{proyecto.ubicacion}</p>
           </div>

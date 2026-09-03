@@ -1,36 +1,36 @@
-/**
- * Wordmark "LA RIBERA": la última A es una Λ con la onda naranja apoyada abajo.
- * Reconstruido a partir de las piezas de RRSS — reemplazar por el SVG original
- * del manual de marca cuando la agencia lo entregue.
- */
-export function Logo({ className = "" }: { className?: string }) {
+import Image from "next/image";
+
+/** Wordmark oficial. Las tres variantes salen del manual de marca. */
+const variantes = {
+  lima: "/img/logo-lima.webp", // lima con la onda naranja: sobre fondos oscuros y fotos
+  crema: "/img/logo-crema.webp", // monocromo claro: sobre verde
+  verde: "/img/logo-verde.webp", // monocromo oscuro: sobre crema
+} as const;
+
+// Proporción del archivo (760x100), para reservar el espacio y evitar saltos.
+const RATIO = 7.6;
+
+export function Logo({
+  variante = "verde",
+  className = "",
+  alto = 24,
+  priority = false,
+}: {
+  variante?: keyof typeof variantes;
+  className?: string;
+  /** Alto en píxeles del wordmark. El ancho se deriva de la proporción. */
+  alto?: number;
+  priority?: boolean;
+}) {
   return (
-    <span
-      className={`inline-flex items-baseline font-extrabold tracking-[0.14em] select-none ${className}`}
-      aria-label="La Ribera"
-      role="img"
-    >
-      <span aria-hidden>LA RIBER</span>
-      <svg
-        viewBox="-6 0 96 116"
-        className="ml-[0.02em] h-[1em] w-[0.82em] shrink-0 translate-y-[0.11em] overflow-visible"
-        fill="none"
-        aria-hidden
-      >
-        <path
-          d="M7 80 L42 6 L77 80"
-          stroke="currentColor"
-          strokeWidth="15"
-          strokeLinejoin="miter"
-        />
-        <path
-          d="M-2 98 q22 -20 44 0 t44 0"
-          stroke="var(--color-naranja)"
-          strokeWidth="14"
-          strokeLinecap="round"
-          fill="none"
-        />
-      </svg>
-    </span>
+    <Image
+      src={variantes[variante]}
+      alt="La Ribera"
+      width={Math.round(alto * RATIO)}
+      height={alto}
+      priority={priority}
+      className={`w-auto ${className}`}
+      style={{ height: alto }}
+    />
   );
 }

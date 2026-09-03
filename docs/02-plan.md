@@ -44,9 +44,10 @@ la calidez de las piezas de La Ribera.
 | — | Cinta de datos duros (marquee) | ✅ maqueta |
 | 01 | El proyecto: relato + contadores (269 / 200–220 m² / 4 servicios) | ✅ maqueta |
 | 02 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
-| 03 | Ubicación: Google Maps interactivo + accesos | ⚠️ faltan coordenadas y clave de API |
+| 03 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
 | 04 | La vida acá: galería con los copies de campaña | ✅ maqueta |
 | 05 | Financiación: statement + CTA | ⚠️ faltan valores y condiciones |
+| — | Quiénes lo hacen: desarrolladora y comercializadora | ✅ con logos |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |
 
 Todo el texto vive en `src/content/site.ts`. Cambiar un copy no requiere tocar componentes.
@@ -63,8 +64,9 @@ Instagram no molesta; en una landing sí. La regla que aplicamos:
 
 Conviene validarlo con Pámpano: es un ajuste de medio, no un cambio de marca.
 
-**Logo.** Está reconstruido en SVG (`src/components/Logo.tsx`) a partir de las piezas.
-Necesitamos el archivo vectorial original del manual de marca.
+**Logo.** Usamos el wordmark oficial en tres variantes (`logo-lima`, `logo-crema`,
+`logo-verde` en `public/img`). Vinieron en PNG; si aparece el SVG del manual conviene
+cambiarlo, porque el nav lo escala y el vector se vería más limpio.
 
 **Tipografía.** Figtree aproxima la grotesca de las piezas. Si el manual define otra
 tipografía, se cambia en un solo lugar (`src/app/layout.tsx`).
@@ -72,18 +74,19 @@ tipografía, se cambia en un solo lugar (`src/app/layout.tsx`).
 ## Mapa de la sección Ubicación
 
 Usa la Maps JavaScript API de Google, con el estilo del mapa derivado de los tokens de
-marca y un círculo naranja marcando el área en lugar de un pin: mientras no tengamos el
-plano de mensura, un punto exacto sería inventado.
+marca. Las coordenadas del predio (`-33.0261908, -60.6073826`) las confirmó el cliente y
+están en `ubicacion.mapa` dentro de `src/content/site.ts`.
+
+El toggle alterna entre **La zona** (el mapa interactivo, con el marcador sobre el predio) y
+**El predio** (la satelital de las piezas, que tiene el terreno delimitado por la agencia).
 
 El componente se activa solo si existe `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. Sin esa variable
-cae a la satelital de las piezas, así que la página nunca queda rota. El botón "Cómo llegar"
-abre Google Maps y funciona en los dos casos.
+cae a la satelital, así que la página nunca queda rota. El botón "Cómo llegar" abre Google
+Maps y funciona en los dos casos.
 
-Para encenderlo: crear la clave en Google Cloud con la Maps JavaScript API habilitada,
-restringirla por dominio, y cargarla como variable de entorno en Vercel. Las coordenadas y
-el radio están en `ubicacion.mapa` dentro de `src/content/site.ts`; cuando se carguen las
-reales hay que poner `preciso: true` para que desaparezca el cartel de "ubicación
-aproximada".
+La clave es pública por diseño —`NEXT_PUBLIC_` la inlinea en el bundle, y Maps JS la
+necesita en el navegador—, así que lo que la protege es la restricción por dominio en
+Google Cloud, no el secreto.
 
 ## Qué necesitamos del cliente
 
@@ -101,7 +104,8 @@ Importantes, no bloqueantes:
 6. Fotos y renders **sin tipografía encima**, y el masterplan del loteo.
 7. Distancias y accesos verificados (a VGG, a Rosario, a la autopista), y las coordenadas
    del predio para el mapa.
-8. Logo vectorial y manual de marca.
+8. Versión vectorial del logo, y versiones oscuras de los logos de Mutual 18 de Julio y
+   Qala: los entregados son blancos y sólo funcionan sobre fondo oscuro.
 9. Definir si se muestra disponibilidad por lote o sólo un formulario general.
 
 ## Próximas iteraciones
@@ -118,6 +122,12 @@ Open Graph con imagen propia, JSON-LD de `RealEstateListing`, y una pasada de Li
 
 **Backlog.** Masterplan interactivo con lotes disponibles; galería de avance de obra;
 sección de preguntas frecuentes; versión en inglés si apuntan a compradores de afuera.
+
+## Reglas de trabajo
+
+**Mobile-first.** Todo cambio se piensa y se verifica primero en 375px, y recién después se
+adapta hacia arriba con los breakpoints de Tailwind. Los estilos base son los de mobile; `sm:`
+y `md:` sólo agregan.
 
 ## Cómo trabajar el repo
 

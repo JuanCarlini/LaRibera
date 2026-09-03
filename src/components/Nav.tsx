@@ -34,7 +34,14 @@ export function Nav() {
     >
       <div className="contenedor flex h-18 items-center justify-between gap-6">
         <a href="#top" className="shrink-0" onClick={() => setAbierto(false)}>
-          <Logo className="text-lg md:text-xl" />
+          {/* Sobre la foto del hero va la versión lima; al fijarse el fondo
+              pasa a crema y necesita el wordmark verde. */}
+          <Logo
+            variante={pegado || abierto ? "verde" : "lima"}
+            alto={18}
+            priority
+            className="md:!h-[22px]"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex">

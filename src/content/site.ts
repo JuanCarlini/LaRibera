@@ -98,15 +98,30 @@ export const ubicacion = {
   },
 };
 
-/**
- * Quién está detrás del proyecto. Los logos van en /public/img cuando las
- * empresas los entreguen; mientras tanto se muestra el nombre compuesto.
- */
+/** Quién está detrás del proyecto. */
 export const actores = {
   eyebrow: "Quiénes lo hacen",
+  // ancho/alto son los del archivo, para que next/image sirva la resolución
+  // correcta. `escala` es la fracción de la caja que ocupa cada logo: el de
+  // Mutual es una tira larga y el de Qala compacto, así que emparejarlos por
+  // altura pura dejaría a Qala visualmente chico.
   items: [
-    { rol: "Desarrolla", nombre: "Mutual 18 de Julio", logo: null as string | null },
-    { rol: "Comercializa", nombre: "Qala Desarrollos", logo: null as string | null },
+    {
+      rol: "Desarrolla",
+      nombre: "Asociación Mutual 18 de Julio",
+      logo: "/img/logo-mutual.webp",
+      ancho: 700,
+      alto: 179,
+      escala: 0.9,
+    },
+    {
+      rol: "Comercializa",
+      nombre: "Qala Desarrollos",
+      logo: "/img/logo-qala.webp",
+      ancho: 292,
+      alto: 151,
+      escala: 1,
+    },
   ],
 };
 

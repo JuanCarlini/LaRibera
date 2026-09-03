@@ -32,8 +32,8 @@ export function Servicios() {
     <section id="servicios" className="relative bg-verde text-crema">
       <div className="relative h-[42vw] max-h-[520px] min-h-56 w-full">
         <Image
-          src="/img/aerial-barrio.webp"
-          alt="Vista cenital de las manzanas del loteo junto al barrio consolidado"
+          src="/img/masterplan-aereo.webp"
+          alt="Vista aérea del barrio con sus manzanas, calles y espacios verdes"
           fill
           sizes="100vw"
           className="object-cover"

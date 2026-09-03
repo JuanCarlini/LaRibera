@@ -3,10 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Eyebrow, Flecha, IconoWhatsapp } from "./ui";
 import { financiacion as f, proyecto } from "@/content/site";
+import cac from "@/content/cac.json";
 
 const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 const pesos = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 const metros = new Intl.NumberFormat("es-AR", { minimumFractionDigits: 2 });
+const puntos = new Intl.NumberFormat("es-AR", { minimumFractionDigits: 1 });
 
 type Cotizacion = { valor: number; envivo: boolean; fecha: string };
 
@@ -57,6 +59,9 @@ export function Financiacion() {
   }, [anticipo, lote, plazo]);
 
   const cuotaPesos = plan.cuotaUsd * cotizacion.valor;
+  // Lo que suma el ajuste por CAC sobre la cuota, con la última variación
+  // publicada. Es un mes de ajuste, no una proyección hacia adelante.
+  const ajusteCac = cuotaPesos * (cac.variacionMensual / 100);
 
   const consulta = `https://wa.me/${proyecto.whatsapp}?text=${encodeURIComponent(
     [
@@ -166,7 +171,10 @@ export function Financiacion() {
               ${pesos.format(cuotaPesos)}
               <span className="text-lg font-semibold text-crema/50"> /mes</span>
             </p>
-            <p className="mt-2 text-sm text-crema/60">
+            <p className="mt-1.5 text-base font-bold text-naranja">
+              + ${pesos.format(ajusteCac)} de CAC en pesos estimado
+            </p>
+            <p className="mt-3 text-sm text-crema/60">
               Equivale a <strong className="text-crema">USD {usd.format(plan.cuotaUsd)}</strong> por
               mes
             </p>
@@ -190,11 +198,13 @@ export function Financiacion() {
                   : `· valor de referencia al ${cotizacion.fecha}`}
               </p>
               <p>
-                Las cuotas se abonan en pesos y se actualizan mes a mes por el índice CAC
-                (CAMARCO).
-                {f.cac.variacion !== null &&
-                  ` Última variación informada: ${f.cac.variacion > 0 ? "+" : ""}${f.cac.variacion}% (${f.cac.periodo}).`}{" "}
-                No se proyectan valores futuros.
+                Índice CAC (CAMARCO) de {cac.periodo}:{" "}
+                <strong className="text-crema/75">
+                  {cac.variacionMensual > 0 ? "+" : ""}
+                  {String(cac.variacionMensual).replace(".", ",")}% mensual
+                </strong>
+                , {puntos.format(cac.valor)} puntos. Las cuotas se abonan en pesos y se
+                actualizan con esa variación. No se proyectan valores futuros.
               </p>
             </div>
 

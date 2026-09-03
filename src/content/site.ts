@@ -204,16 +204,8 @@ export const financiacion = {
     respaldoFecha: "3 de septiembre de 2026",
   },
 
-  /**
-   * Variación mensual del índice CAC (CAMARCO). No hay API pública, así que se
-   * carga a mano cada mes. Con `variacion: null` la calculadora explica el
-   * ajuste sin dar un número, que es preferible a publicar uno desactualizado.
-   * TODO: cargar la última variación informada y su período.
-   */
-  cac: {
-    variacion: null as number | null,
-    periodo: "",
-  },
+  // El índice CAC vive en `cac.json` y lo refresca `tools/actualizar-cac.mjs`,
+  // que corre por GitHub Actions todos los meses contra la nota de CAMARCO.
 
   legales:
     "Simulación orientativa: no constituye oferta comercial ni obligación de financiación. Los montos definitivos, el anticipo y las condiciones de cada operación quedan sujetos a evaluación comercial. Las cuotas se abonan en pesos y se actualizan según la variación del índice de la Cámara Argentina de la Construcción (CAC). La cotización del dólar es de referencia y varía a diario.",

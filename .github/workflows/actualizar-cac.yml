@@ -1,0 +1,41 @@
+name: Actualizar índice CAC
+
+# CAMARCO publica el indicador del mes anterior alrededor del día 24.
+# Corremos varias veces entre el 24 y el 28 porque la fecha exacta se mueve;
+# si el dato no cambió, el script no toca nada y no se commitea.
+on:
+  schedule:
+    - cron: "0 13 24-28 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Leer el último indicador publicado
+        run: node tools/actualizar-cac.mjs
+
+      - name: Commitear si cambió
+        run: |
+          if git diff --quiet -- src/content/cac.json; then
+            echo "El índice no cambió; no hay nada que commitear."
+            exit 0
+          fi
+          git config user.name "Actualizador CAC"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/content/cac.json
+          git commit -m "Actualizar índice CAC
+
+          $(node -e "const c=require('./src/content/cac.json');console.log(\`\${c.periodo}: \${c.valor} puntos, \${c.variacionMensual}% mensual.\nFuente: \${c.fuente}\`)")"
+          git push origin dev

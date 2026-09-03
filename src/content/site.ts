@@ -84,11 +84,12 @@ export const ubicacion = {
   titulo: ["Loteo costero de Villa", "Gobernador Gálvez"],
   bajada:
     "Ubicado sobre la vera del río Paraná, a minutos del centro de VGG y con acceso directo a Rosario.",
-  // TODO: reemplazar por distancias y accesos reales verificados con el cliente.
+  // Calles y accesos tomados del plano de mensura y del plan de obras.
+  // TODO: sumar distancias y tiempos verificados cuando el cliente los confirme.
   datos: [
-    { titulo: "Villa Gobernador Gálvez", detalle: "Centro a pocos minutos" },
-    { titulo: "Rosario", detalle: "Acceso directo por la costa" },
-    { titulo: "Río Paraná", detalle: "El loteo se apoya sobre la ribera" },
+    { titulo: "Av. Alem y José Ingenieros", detalle: "Frentes del loteo" },
+    { titulo: "Rotonda de calle Ecuador", detalle: "Acceso principal" },
+    { titulo: "Río Paraná", detalle: "El barrio se apoya sobre la ribera" },
   ],
   mapa: {
     // Coordenadas del predio confirmadas por el cliente (03/09/2026).

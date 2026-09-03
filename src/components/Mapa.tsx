@@ -60,7 +60,11 @@ const { centro, zoom, preciso } = ubicacion.mapa;
 /** Abre las indicaciones en Google Maps. Funciona con o sin clave de API. */
 export const comoLlegarHref = `https://www.google.com/maps/dir/?api=1&destination=${centro.lat},${centro.lng}`;
 
-const marco = "relative aspect-4/3 overflow-hidden rounded-3xl bg-verde/10";
+const marco =
+  "relative overflow-hidden rounded-3xl bg-verde/10 transition-[aspect-ratio] duration-300";
+/** El plano es mucho más apaisado que el mapa: si lo metemos en 4:3 queda
+    diminuto y con dos franjas vacías. El marco toma la proporción de la vista. */
+const PROPORCION = { zona: "4 / 3", predio: "2048 / 868" } as const;
 
 export function Mapa() {
   const contenedor = useRef<HTMLDivElement>(null);
@@ -120,17 +124,17 @@ export function Mapa() {
   if (!CLAVE || error) {
     return (
       <div>
-        <div className={marco}>
+        <div className={marco} style={{ aspectRatio: PROPORCION.predio }}>
           <Predio />
         </div>
-        <Aclaracion />
+        <PieDePlano />
       </div>
     );
   }
 
   return (
     <div>
-      <div className={marco}>
+      <div className={marco} style={{ aspectRatio: PROPORCION[vista] }}>
         {/* Las dos vistas quedan montadas y se alternan con opacidad, así el
             mapa no necesita reinicializarse ni recalcular su tamaño. */}
         <div
@@ -169,20 +173,43 @@ export function Mapa() {
           ))}
         </div>
       </div>
-      <Aclaracion />
+      {vista === "predio" ? <PieDePlano /> : <Aclaracion />}
     </div>
   );
 }
 
+/**
+ * Plano de mensura. Va contenido y no recortado: es un plano técnico y
+ * perder los bordes se lleva puestas las calles que lo delimitan.
+ */
 function Predio() {
   return (
-    <Image
-      src="/img/mapa-ubicacion.webp"
-      alt={`Vista satelital de ${proyecto.ubicacion} con el predio de La Ribera marcado`}
-      fill
-      sizes="(min-width: 1024px) 50vw, 100vw"
-      className="object-cover"
-    />
+    <div className="flex h-full w-full items-center justify-center bg-crema p-3">
+      <Image
+        src="/img/plano-loteo.webp"
+        alt={`Plano de mensura de La Ribera con los 269 lotes, en ${proyecto.ubicacion}`}
+        width={2048}
+        height={868}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="h-auto w-full object-contain"
+      />
+    </div>
+  );
+}
+
+function PieDePlano() {
+  return (
+    <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-verde/55">
+      <span>Plano de mensura · 269 lotes de 211 a 240 m²</span>
+      <a
+        href="/img/plano-loteo.webp"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-bold text-naranja-600 underline underline-offset-2"
+      >
+        Ver plano completo
+      </a>
+    </p>
   );
 }
 

@@ -26,17 +26,17 @@ export const nav = [
 ];
 
 export const hero = {
-  kicker: "Nuevo loteo · Villa Gobernador Gálvez",
+  kicker: "Barrio residencial abierto · Villa Gobernador Gálvez",
   titulo: ["Acá empieza", "tu futuro"],
   bajada:
-    "269 lotes sobre la vera del río Paraná, con todos los servicios y la infraestructura que importa desde el primer día.",
+    "269 lotes de 211 a 240 m² sobre la vera del río Paraná, con todos los servicios y la infraestructura que importa desde el primer día.",
   ctaPrimario: "Quiero mi lote",
   ctaSecundario: "Conocé el barrio",
 };
 
 export const ticker = [
   "269 lotes",
-  "200 a 220 m²",
+  "211 a 240 m²",
   "Gas natural",
   "Electricidad",
   "Red de agua",
@@ -53,7 +53,7 @@ export const cifras: {
   detalle: string;
 }[] = [
   { valor: 269, label: "Lotes", detalle: "en el nuevo loteo" },
-  { valor: 200, hasta: 220, sufijo: " m²", label: "Superficie", detalle: "por lote" },
+  { valor: 211, hasta: 240, sufijo: " m²", label: "Superficie", detalle: "por lote" },
   { valor: 4, label: "Servicios", detalle: "de red incluidos" },
 ];
 
@@ -62,7 +62,7 @@ export const proyectoSeccion = {
   titulo: ["Descubrí el lugar donde", "proyectar tus sueños"],
   parrafos: [
     "En La Ribera pensamos en un lugar que acompañe cada etapa de tu vida: un espacio para crecer, compartir y construir esos recuerdos que mañana vas a querer volver a vivir.",
-    "269 lotes de entre 200 y 220 m², pensados para construir, crecer y hacer realidad tu próximo hogar.",
+    "269 lotes de entre 211 y 240 m², pensados para construir, crecer y hacer realidad tu próximo hogar.",
   ],
 };
 
@@ -128,20 +128,41 @@ export const actores = {
 export const vida = {
   eyebrow: "04 / La vida acá",
   titulo: ["Un lugar para crecer hoy.", "Un hogar para recordar mañana."],
-  bloques: [
+  bajada:
+    "El barrio no es sólo el lote. Es todo lo que pasa alrededor, todos los días.",
+  /** Cards del carrusel. Los datos duros salen del plan de obras (agosto 2026). */
+  cards: [
     {
-      img: "/img/parque-familia.webp",
-      alt: "Familia caminando por el parque del barrio al atardecer",
-      titulo: "Un lugar creado para cumplir el sueño de tu familia",
+      img: "/img/parque-juegos.webp",
+      alt: "Parque del barrio con juegos infantiles, bancos y forestación",
+      dato: "6.027 m²",
+      titulo: "Espacios verdes propios",
       texto:
-        "La Ribera nace para que puedas proyectar tu hogar, compartir nuevos momentos y construir una historia que se disfrute todos los días.",
+        "Áreas públicas parquizadas y un plan de forestación con especies nativas, para que el barrio crezca a la sombra.",
     },
     {
-      img: "/img/chicos-jugando.webp",
-      alt: "Chicos jugando a la pelota en la calle del barrio",
-      titulo: "Espacio para crecer y compartir",
+      img: "/img/reservorio-gym.webp",
+      alt: "Reservorio de agua con estación de musculación al aire libre",
+      dato: "4.240 m²",
+      titulo: "Reservorio y gimnasio al aire libre",
       texto:
-        "Calles arboladas, veredas y espacios verdes pensados para que la vida del barrio pase también puertas afuera.",
+        "El reservorio regula los caudales de lluvia y ordena el agua del barrio. Alrededor, una estación de musculación abierta a todos.",
+    },
+    {
+      img: "/img/familia-calle.webp",
+      alt: "Familia caminando por una calle arbolada del barrio al atardecer",
+      dato: "4.640 m",
+      titulo: "Calles para caminar",
+      texto:
+        "Cordón cuneta de hormigón en todas las arterias del loteo, con 107 columnas de iluminación LED para moverse tranquilo a cualquier hora.",
+    },
+    {
+      img: "/img/masterplan-aereo.webp",
+      alt: "Vista aérea cenital del barrio con sus manzanas y espacios verdes",
+      dato: "105.593 m²",
+      titulo: "Un barrio completo",
+      texto:
+        "Entre lotes, calles, espacios verdes, reservorio e infraestructura comunitaria. Un barrio abierto, integrado a la trama de VGG.",
     },
   ],
 };

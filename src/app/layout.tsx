@@ -15,14 +15,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://lariberavgg.com.ar"),
   title: "La Ribera | Loteo costero en Villa Gobernador Gálvez",
   description:
-    "269 lotes de 200 a 220 m² sobre la vera del río Paraná, con gas natural, electricidad, red de agua y cloacas. Acá empieza tu futuro.",
+    "269 lotes de 211 a 240 m² sobre la vera del río Paraná, con gas natural, electricidad, red de agua y cloacas. Acá empieza tu futuro.",
   openGraph: {
     title: "La Ribera | Loteo costero en Villa Gobernador Gálvez",
     description:
-      "269 lotes de 200 a 220 m² con todos los servicios, sobre la vera del río Paraná.",
+      "269 lotes de 211 a 240 m² con todos los servicios, sobre la vera del río Paraná.",
     locale: "es_AR",
     type: "website",
-    images: ["/img/hero-loteo.webp"],
+    images: ["/img/hero-aerea-rio.webp"],
   },
 };
 

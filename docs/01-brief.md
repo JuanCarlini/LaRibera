@@ -1,7 +1,8 @@
 # La Ribera — Brief del proyecto
 
-Todo lo de este documento sale de `Contenidos RRSS_LaRibera.pptx` (agencia Pámpano,
-lanzamiento de RRSS). Es la única fuente de verdad que tenemos hasta ahora.
+Fuentes: `Contenidos RRSS_LaRibera.pptx` (agencia Pámpano, lanzamiento de RRSS) y
+`Presentación_Loteo La Ribera.pptx` (agosto 2026), que es la más reciente y manda cuando
+los datos no coinciden.
 
 ## Qué es
 
@@ -14,10 +15,53 @@ RRSS son de expectativa ("muy pronto, más información").
 | Dato | Valor |
 |---|---|
 | Cantidad de lotes | 269 |
-| Superficie por lote | 200 a 220 m² |
+| Superficie por lote | **211 a 240 m²** |
+| Superficie total s/mensura | 105.593 m² |
+| Lotes | 60.253 m² |
+| Calles | 31.355 m² |
+| Espacios verdes | 6.027 m² |
+| Reservorio | 4.240 m² |
+| Infraestructura comunitaria | 3.003 m² |
+| Espacio cedido | 715 m² |
 | Servicios | Gas natural, electricidad, red de agua, cloacas |
 | Ubicación | Villa Gobernador Gálvez, sobre el río Paraná |
+| Coordenadas | -33.0261908, -60.6073826 |
 | Contacto en las piezas | +54 9 3385 43-7168 |
+
+La presentación de agosto corrige la superficie: las piezas de RRSS decían 200 a 220 m².
+El dato bueno es **211 a 240 m²**, y el titular oficial del cartel es "de hasta 240 m²".
+
+## Infraestructura proyectada
+
+| Ítem | Cantidad |
+|---|---|
+| Red de gas | 3.800 m |
+| Red cloacal | 4.120 m |
+| Red de agua | 3.750 m |
+| Cordón cuneta | 4.640 m |
+| Colector pluvial | 640 m |
+| Columnas de iluminación | 107 |
+| Columnas de baja tensión | 112 |
+
+El plan de obras tiene cinco capítulos: infraestructura vial, saneamiento hidráulico y
+pluvial, redes de servicios, electrificación e iluminación, y espacios públicos. Este último
+suma **plaza de juegos infantiles y estación de musculación al aire libre**, más forestación
+con especies nativas.
+
+## Factibilidades — estado a agosto 2026
+
+| Servicio | Estado |
+|---|---|
+| Energía eléctrica | Otorgada por la Cooperativa Integral de VGG (17/12/2025) |
+| Gas natural | Otorgada por Litoral Gas, anteproyecto P/RO/25/173, **vence 16/06/2026** |
+| Agua y cloacas | **Solicitada** a Aguas Santafesinas el 16/12/2025, sin respuesta |
+| Hídrica | En trámite, informe de área de riesgo hídrico presentado |
+| Municipalidad | Expediente N° 61528/25, iniciado 18/12/2025 |
+| Medio ambiente | En trámite, categorización y estudio de impacto |
+
+Esto es material sensible para los legales del sitio: **no se puede afirmar que el barrio
+"tiene" los servicios**, sólo que están proyectados y con factibilidad donde corresponda.
+El copy actual usa "contará con", que es la forma correcta.
 
 ## Público y promesa
 
@@ -41,6 +85,9 @@ Colores muestreados directamente de los PNG de las piezas:
 | Verde oscuro (fondos y texto) | `#063424` |
 | Lima (titulares sobre oscuro) | `#99C561` |
 | Naranja (acento y CTA) | `#FC6011` |
+
+**Posicionamiento oficial:** "Barrio Residencial Abierto". El cartel de vía pública remata
+con "269 Lotes · De hasta 240 m² · Con todos los servicios · Financiación disponible".
 
 **Marca:** wordmark "LA RIBERA" en mayúsculas con tracking amplio; la última A es una
 **Λ sin travesaño** con una **onda naranja** apoyada abajo. Esa onda es el recurso gráfico

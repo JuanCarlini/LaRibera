@@ -7,8 +7,8 @@ export function Hero() {
   return (
     <section id="top" className="relative isolate min-h-[100svh] overflow-hidden">
       <Image
-        src="/img/hero-loteo.webp"
-        alt="Vista aérea del loteo La Ribera al atardecer"
+        src="/img/hero-aerea-rio.webp"
+        alt="Vista aérea de La Ribera con el río Paraná al fondo"
         fill
         priority
         sizes="100vw"

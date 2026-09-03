@@ -42,10 +42,10 @@ la calidez de las piezas de La Ribera.
 |---|---|---|
 | — | Hero: aérea + "Acá empieza tu futuro" + 2 CTA | ✅ maqueta |
 | — | Cinta de datos duros (marquee) | ✅ maqueta |
-| 01 | El proyecto: relato + contadores (269 / 200–220 m² / 4 servicios) | ✅ maqueta |
+| 01 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
 | 02 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
 | 03 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
-| 04 | La vida acá: galería con los copies de campaña | ✅ maqueta |
+| 04 | La vida acá: carrusel de cards que avanza con el scroll | ✅ con renders reales |
 | 05 | Financiación: statement + CTA | ⚠️ faltan valores y condiciones |
 | — | Quiénes lo hacen: desarrolladora y comercializadora | ✅ con logos |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |
@@ -53,6 +53,17 @@ la calidez de las piezas de La Ribera.
 Todo el texto vive en `src/content/site.ts`. Cambiar un copy no requiere tocar componentes.
 
 ## Decisiones de diseño que se apartan de las piezas
+
+**Carrusel de "La vida acá".** La sección queda fijada y el riel de cards se desplaza en
+horizontal según el progreso del scroll. El alto de la sección se calcula después de montar
+como `innerHeight + recorrido del riel`, así un píxel de scroll mueve un píxel de card en
+cualquier pantalla: con alto fijo, en desktop se scrolleaba de más para mover muy poco.
+Con `prefers-reduced-motion` no se fija nada y el riel se recorre a dedo con scroll-snap.
+
+**Imágenes.** Las de la maqueta inicial eran recortes de las piezas de RRSS, que son
+generadas. Ya están reemplazadas por los renders del proyecto que vinieron en la
+presentación de agosto (`tools/prep-renders.mjs`). Quedan dos de las viejas: el fondo de
+Servicios y la banda de Financiación.
 
 **Contraste.** La dupla lima `#99C561` + naranja `#FC6011` sobre crema `#E6E6DB` da 1.8:1 y
 2.8:1 — no llega ni al 3:1 que WCAG AA pide para texto grande. En impresión y en un feed de

@@ -38,10 +38,16 @@ function cargarSdk(clave: string) {
   if (cargando) return cargando;
 
   cargando = new Promise<void>((resolver, rechazar) => {
+    // loading=async + callback es el patrón que pide Google; sin él tira un
+    // warning de performance en consola.
+    const nombreCallback = "__mapaRiberaListo";
+    (window as any)[nombreCallback] = () => resolver();
+
     const s = document.createElement("script");
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${clave}&v=weekly&language=es-419&region=AR`;
+    s.src =
+      `https://maps.googleapis.com/maps/api/js?key=${clave}` +
+      `&v=weekly&language=es-419&region=AR&loading=async&callback=${nombreCallback}`;
     s.async = true;
-    s.onload = () => resolver();
     s.onerror = () => rechazar(new Error("No se pudo cargar Google Maps"));
     document.head.appendChild(s);
   });

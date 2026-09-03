@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { PlanoAmpliado } from "./PlanoAmpliado";
 import { ubicacion, proyecto } from "@/content/site";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -64,13 +65,14 @@ const marco =
   "relative overflow-hidden rounded-3xl bg-verde/10 transition-[aspect-ratio] duration-300";
 /** El plano es mucho más apaisado que el mapa: si lo metemos en 4:3 queda
     diminuto y con dos franjas vacías. El marco toma la proporción de la vista. */
-const PROPORCION = { zona: "4 / 3", predio: "2048 / 868" } as const;
+const PROPORCION = { zona: "4 / 3", predio: "1872 / 796" } as const;
 
 export function Mapa() {
   const contenedor = useRef<HTMLDivElement>(null);
   const mapa = useRef<any>(null);
   const [vista, setVista] = useState<"zona" | "predio">("zona");
   const [error, setError] = useState(false);
+  const [ampliado, setAmpliado] = useState(false);
 
   useEffect(() => {
     if (!CLAVE || !contenedor.current) return;
@@ -124,10 +126,17 @@ export function Mapa() {
   if (!CLAVE || error) {
     return (
       <div>
-        <div className={marco} style={{ aspectRatio: PROPORCION.predio }}>
+        <button
+          type="button"
+          onClick={() => setAmpliado(true)}
+          className={`${marco} block w-full cursor-zoom-in`}
+          style={{ aspectRatio: PROPORCION.predio }}
+          aria-label="Ampliar el plano de mensura"
+        >
           <Predio />
-        </div>
-        <PieDePlano />
+        </button>
+        <PieDePlano onAmpliar={() => setAmpliado(true)} />
+        {ampliado && <PlanoAmpliado onCerrar={() => setAmpliado(false)} />}
       </div>
     );
   }
@@ -149,7 +158,15 @@ export function Mapa() {
           }`}
           aria-hidden={vista !== "predio"}
         >
-          <Predio />
+          <button
+            type="button"
+            onClick={() => setAmpliado(true)}
+            className="block h-full w-full cursor-zoom-in"
+            aria-label="Ampliar el plano de mensura"
+            tabIndex={vista === "predio" ? 0 : -1}
+          >
+            <Predio />
+          </button>
         </div>
 
         <div className="absolute top-4 left-4 z-10 flex rounded-full bg-crema/95 p-1 shadow-sm backdrop-blur">
@@ -173,7 +190,12 @@ export function Mapa() {
           ))}
         </div>
       </div>
-      {vista === "predio" ? <PieDePlano /> : <Aclaracion />}
+      {vista === "predio" ? (
+        <PieDePlano onAmpliar={() => setAmpliado(true)} />
+      ) : (
+        <Aclaracion />
+      )}
+      {ampliado && <PlanoAmpliado onCerrar={() => setAmpliado(false)} />}
     </div>
   );
 }
@@ -184,12 +206,12 @@ export function Mapa() {
  */
 function Predio() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-crema p-3">
+    <div className="flex h-full w-full items-center justify-center bg-crema">
       <Image
         src="/img/plano-loteo.webp"
         alt={`Plano de mensura de La Ribera con los 269 lotes, en ${proyecto.ubicacion}`}
-        width={2048}
-        height={868}
+        width={1872}
+        height={796}
         sizes="(min-width: 1024px) 50vw, 100vw"
         className="h-auto w-full object-contain"
       />
@@ -197,18 +219,17 @@ function Predio() {
   );
 }
 
-function PieDePlano() {
+function PieDePlano({ onAmpliar }: { onAmpliar: () => void }) {
   return (
     <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-verde/55">
       <span>Plano de mensura · 269 lotes de 211 a 240 m²</span>
-      <a
-        href="/img/plano-loteo.webp"
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        type="button"
+        onClick={onAmpliar}
         className="font-bold text-naranja-600 underline underline-offset-2"
       >
-        Ver plano completo
-      </a>
+        Ampliar plano
+      </button>
     </p>
   );
 }

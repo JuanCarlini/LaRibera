@@ -11,11 +11,20 @@ const jobs = [
   { src: "image1.png",  out: "familia-calle",    w: 1800, nota: "Familia caminando por la calle" },
   { src: "image7.png",  out: "parque-juegos",    w: 1800, nota: "Parque con juegos y forestación" },
   { src: "image9.png",  out: "reservorio-gym",   w: 1800, nota: "Reservorio y estación de musculación" },
-  { src: "image17.jpg", out: "plano-loteo",      w: 2048, nota: "Plano de mensura con los 269 lotes" },
+  // El plano trae 176 px muertos a la derecha y 72 arriba: recortarlos le da
+  // un 13% más de dibujo dentro de la misma caja.
+  {
+    src: "image17.jpg",
+    out: "plano-loteo",
+    w: 1872,
+    nota: "Plano de mensura con los 269 lotes",
+    recorte: { left: 0, top: 72, width: 1872, height: 796 },
+  },
 ];
 
 for (const j of jobs) {
-  await sharp(`${SRC}/${j.src}`)
+  const origen = sharp(`${SRC}/${j.src}`);
+  await (j.recorte ? origen.extract(j.recorte) : origen)
     .resize({ width: j.w, withoutEnlargement: true })
     .webp({ quality: 80 })
     .toFile(`public/img/${j.out}.webp`);

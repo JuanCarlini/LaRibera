@@ -1,70 +1,21 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { Eyebrow } from "./ui";
 import { vida as s } from "@/content/site";
 
-/** Escala mínima de una card cuando está lejos del centro del viewport. */
-const MIN_MOBILE = 0.86;
-const MIN_DESKTOP = 0.74;
-
 /**
- * Cada card ocupa una pantalla y se desliza en vertical con la página,
- * creciendo a medida que llega al centro del viewport y achicándose al salir.
- * El encabezado queda fijo detrás y las cards pasan por encima.
+ * Cards apiladas: cada una se congela en el centro del viewport y la siguiente
+ * sube y la tapa. Al pasar la última, el scroll se libera.
+ *
+ * Es CSS puro: cada <li> mide una pantalla y queda `sticky`, así que la primera
+ * se frena mientras las que siguen entran desde abajo. No hace falta ni un
+ * listener de scroll. Cada card se pega unos píxeles más abajo que la anterior
+ * para que asome el borde de la que quedó debajo y se lea como pila.
  */
+const DESFASE_PX = 10;
+
 export function Vida() {
-  const lista = useRef<HTMLUListElement>(null);
-  const [reducido, setReducido] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const aplicar = () => setReducido(mq.matches);
-    aplicar();
-    mq.addEventListener("change", aplicar);
-    return () => mq.removeEventListener("change", aplicar);
-  }, []);
-
-  useEffect(() => {
-    if (reducido) return;
-    let raf = 0;
-
-    const actualizar = () => {
-      raf = 0;
-      const cards = lista.current?.querySelectorAll<HTMLElement>("[data-card]");
-      if (!cards?.length) return;
-
-      const alto = window.innerHeight;
-      const centroVp = alto / 2;
-      const min = window.innerWidth < 768 ? MIN_MOBILE : MIN_DESKTOP;
-
-      for (const card of cards) {
-        const r = card.getBoundingClientRect();
-        // Distancia al centro del viewport, normalizada a una pantalla.
-        const d = Math.min(Math.abs(r.top + r.height / 2 - centroVp) / alto, 1);
-        card.style.transform = `scale(${(1 - d * (1 - min)).toFixed(4)})`;
-      }
-    };
-
-    const alScrollear = () => {
-      if (!raf) raf = requestAnimationFrame(actualizar);
-    };
-
-    raf = requestAnimationFrame(actualizar);
-    window.addEventListener("scroll", alScrollear, { passive: true });
-    window.addEventListener("resize", alScrollear);
-    return () => {
-      window.removeEventListener("scroll", alScrollear);
-      window.removeEventListener("resize", alScrollear);
-      cancelAnimationFrame(raf);
-    };
-  }, [reducido]);
-
   return (
-    <section id="vida" className="relative overflow-clip bg-crema-100">
-      {/* En flujo normal: fijarlo dejaba el titular asomando por detrás de las
-          cards, que son más angostas que el viewport, y se leía como un error. */}
+    <section id="vida" className="relative bg-crema-100">
       <div className="contenedor pt-20 pb-2 md:pt-28">
         <Eyebrow className="text-verde/65">{s.eyebrow}</Eyebrow>
         <h2 className="titular mt-4">
@@ -74,21 +25,14 @@ export function Vida() {
         <p className="mt-4 max-w-md text-verde/70">{s.bajada}</p>
       </div>
 
-      <ul ref={lista} className="relative">
-        {s.cards.map((c) => (
+      <ul className="relative">
+        {s.cards.map((c, i) => (
           <li
             key={c.titulo}
-            className={
-              reducido
-                ? "px-6 py-8 md:px-10"
-                : "flex h-svh items-center justify-center px-6 md:px-10"
-            }
+            style={{ top: i * DESFASE_PX }}
+            className="sticky flex h-svh items-center justify-center px-6 motion-reduce:static motion-reduce:h-auto motion-reduce:py-6 md:px-10"
           >
-            <article
-              data-card
-              style={{ transform: reducido ? undefined : `scale(${MIN_MOBILE})` }}
-              className="mx-auto w-full max-w-md origin-center overflow-hidden rounded-3xl bg-crema shadow-[0_18px_50px_-24px_rgba(6,52,36,0.45)] will-change-transform md:flex md:max-w-4xl lg:min-h-[26rem] lg:max-w-5xl"
-            >
+            <article className="mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-crema shadow-[0_18px_50px_-24px_rgba(6,52,36,0.45)] md:flex md:max-w-4xl lg:max-w-5xl lg:min-h-[26rem]">
               <div className="relative aspect-4/3 md:aspect-auto md:w-3/5 md:self-stretch">
                 <Image
                   src={c.img}

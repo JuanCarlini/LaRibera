@@ -5,6 +5,21 @@
 **Iteración 1 terminada:** maqueta navegable de la landing completa, con la identidad de las
 piezas de RRSS y los datos que hoy tenemos. Corre con `npm run dev`.
 
+## Entornos
+
+| Rama | URL | Para qué |
+|---|---|---|
+| `dev` | [laribera-git-dev-…vercel.app](https://laribera-git-dev-juanandrescarlini-2112s-projects.vercel.app) | Donde se trabaja. Cada push despliega solo. Pública, se puede compartir para revisar. |
+| `main` | [laribera.vercel.app](https://laribera.vercel.app) | Producción. Recibe merges desde `dev` cuando algo está para publicar. |
+
+## Variables de entorno
+
+| Variable | Obligatoria | Para qué |
+|---|---|---|
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | No | Enciende el mapa interactivo. Sin ella la sección de ubicación cae a la satelital estática. |
+
+Se cargan en Vercel, en Settings → Environment Variables, para Production y Preview.
+
 ## Stack
 
 | Pieza | Elección | Por qué |

@@ -2,12 +2,20 @@
 
 Landing del loteo costero **La Ribera** — Villa Gobernador Gálvez, Santa Fe.
 
+## Ramas
+
+Se trabaja sobre `dev`. `main` es producción y recibe merges desde `dev`.
+Vercel despliega las dos automáticamente en cada push.
+
 ## Desarrollo
 
 ```bash
 npm install
 npm run dev
 ```
+
+Para el mapa de la sección de ubicación, copiar `.env.example` a `.env.local` y cargar la
+clave de la Maps JavaScript API. Sin clave la sección cae a la satelital estática.
 
 ## Documentación
 

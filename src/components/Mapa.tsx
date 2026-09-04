@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PlanoAmpliado } from "./PlanoAmpliado";
 import { ubicacion, proyecto } from "@/content/site";
+import geo from "@/content/mapa.json";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 declare global {
@@ -67,12 +68,19 @@ const marco =
     diminuto y con dos franjas vacías. El marco toma la proporción de la vista. */
 const PROPORCION = { zona: "4 / 3", predio: "1872 / 796" } as const;
 
-export function Mapa() {
+/** Qué resalta el mapa cuando se recorre la lista de accesos. */
+export type Resalte = "frentes" | "rotonda" | "rio" | null;
+
+export function Mapa({ resalte = null }: { resalte?: Resalte }) {
   const contenedor = useRef<HTMLDivElement>(null);
   const mapa = useRef<any>(null);
-  const [vista, setVista] = useState<"zona" | "predio">("zona");
+  const [vistaElegida, setVista] = useState<"zona" | "predio">("zona");
+  // Con el plano a la vista el resalte no se vería, así que mientras haya uno
+  // activo mandamos el mapa. Derivado y no seteado: evita un render de más.
+  const vista = resalte ? "zona" : vistaElegida;
   const [error, setError] = useState(false);
   const [ampliado, setAmpliado] = useState(false);
+  const trazos = useRef<any[]>([]);
 
   useEffect(() => {
     if (!CLAVE || !contenedor.current) return;
@@ -129,6 +137,45 @@ export function Mapa() {
       vivo = false;
     };
   }, []);
+
+  useEffect(() => {
+    const g = window.google?.maps;
+    const m = mapa.current;
+    if (!g || !m) return;
+
+    for (const t of trazos.current) t.setMap(null);
+    trazos.current = [];
+
+    if (!resalte) {
+      m.setCenter(centro);
+      m.setZoom(zoom);
+      return;
+    }
+
+    const limites = new g.LatLngBounds();
+    limites.extend(centro);
+
+    if (resalte === "rio") {
+      // Alejar hasta que entren el predio y el río en el mismo encuadre.
+      limites.extend(geo.rio);
+    } else {
+      for (const linea of resalte === "frentes" ? geo.frentes : geo.rotonda) {
+        trazos.current.push(
+          new g.Polyline({
+            map: m,
+            path: linea,
+            strokeColor: "#fc6011",
+            strokeOpacity: 0.95,
+            strokeWeight: 7,
+            zIndex: 5,
+          }),
+        );
+        for (const punto of linea) limites.extend(punto);
+      }
+    }
+
+    m.fitBounds(limites, 48);
+  }, [resalte]);
 
   if (!CLAVE || error) {
     return (

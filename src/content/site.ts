@@ -88,9 +88,22 @@ export const ubicacion = {
   // Calles y accesos tomados del plano de mensura y del plan de obras.
   // TODO: sumar distancias y tiempos verificados cuando el cliente los confirme.
   datos: [
-    { titulo: "Av. Alem y José Ingenieros", detalle: "Frentes del loteo" },
-    { titulo: "Rotonda de calle Ecuador", detalle: "Acceso principal" },
-    { titulo: "Río Paraná", detalle: "El barrio se apoya sobre la ribera" },
+    // `resalte` conecta cada fila con lo que hace el mapa al recorrerla.
+    {
+      titulo: "Av. Alem y José Ingenieros",
+      detalle: "Frentes del loteo",
+      resalte: "frentes" as const,
+    },
+    {
+      titulo: "Rotonda de calle Ecuador",
+      detalle: "Acceso principal",
+      resalte: "rotonda" as const,
+    },
+    {
+      titulo: "Río Paraná",
+      detalle: "A 1,8 km del predio",
+      resalte: "rio" as const,
+    },
   ],
   mapa: {
     // Coordenadas del predio confirmadas por el cliente (03/09/2026).

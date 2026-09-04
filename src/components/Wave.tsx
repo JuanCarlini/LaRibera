@@ -2,6 +2,10 @@
  * La onda del isotipo usada como transición entre bloques.
  * `position="bottom"` la apoya al pie de una foto; `"top"` la invierte para
  * que muerda el bloque siguiente.
+ *
+ * Nota: el contenedor que la aloja tiene que llevar de fondo el color del
+ * bloque que sigue. La altura de la onda se calcula en vw y con zoom cae en un
+ * píxel fraccionario; sin ese fondo, en la costura asoma una línea de la foto.
  */
 export function Wave({
   className = "",

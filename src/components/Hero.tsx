@@ -5,7 +5,7 @@ import { hero } from "@/content/site";
 
 export function Hero() {
   return (
-    <section id="top" className="relative isolate min-h-[100svh] overflow-hidden">
+    <section id="top" className="relative isolate min-h-[100svh] overflow-hidden bg-crema">
       <Image
         src="/img/hero-aerea-rio.webp"
         alt="Vista aérea de La Ribera con el río Paraná al fondo"

@@ -36,8 +36,6 @@ export function Actores() {
                   style={{ height: `${a.escala * 100}%` }}
                 />
               </div>
-
-              <p className="mt-4 text-sm text-crema/50">{a.nombre}</p>
             </li>
           ))}
         </ul>

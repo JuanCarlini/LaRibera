@@ -1,5 +1,4 @@
 import { Contador } from "./Contador";
-import { Eyebrow } from "./ui";
 import { cifras, proyectoSeccion as s } from "@/content/site";
 
 export function Proyecto() {
@@ -8,10 +7,10 @@ export function Proyecto() {
       <div className="contenedor">
         <div className="grid gap-10 md:grid-cols-12 md:gap-16">
           <div className="md:col-span-7" data-reveal>
-            <Eyebrow className="text-verde/65">{s.eyebrow}</Eyebrow>
-            {/* Sobre fondo claro usamos verde + naranja oscuro: el lima y el
+            {/* Sin eyebrow numerado: se sacó en la reunión del 04/09/2026.
+                Sobre fondo claro usamos verde + naranja oscuro: el lima y el
                 naranja puro de las piezas de RRSS no llegan al contraste AA. */}
-            <h2 className="titular mt-5">
+            <h2 className="titular">
               <span className="block text-verde">{s.titulo[0]}</span>
               <span className="block text-naranja-600">{s.titulo[1]}</span>
             </h2>

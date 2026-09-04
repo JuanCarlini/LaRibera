@@ -6,7 +6,7 @@
 
 export const proyecto = {
   nombre: "La Ribera",
-  bajada: "Loteo costero en Villa Gobernador Gálvez",
+  bajada: "Barrio Residencial Abierto",
   // TODO: confirmar el número con el cliente — el 3385 no corresponde a VGG (área 341).
   whatsapp: "5493385437168",
   whatsappVisible: "+54 9 3385 43-7168",
@@ -28,11 +28,11 @@ export const nav = [
 
 export const hero = {
   kicker: "Barrio residencial abierto · Villa Gobernador Gálvez",
-  titulo: ["Acá empieza", "tu futuro"],
+  titulo: ["Tu futuro", "empieza acá"],
   bajada:
-    "269 lotes de 211 a 240 m² sobre la vera del río Paraná, con todos los servicios y la infraestructura que importa desde el primer día.",
+    "269 lotes desde 211 m² a 240 m² a la vera del río Paraná, con todos los servicios y la infraestructura necesaria para tu próximo hogar.",
   ctaPrimario: "Quiero mi lote",
-  ctaSecundario: "Conocé el barrio",
+  ctaSecundario: "Calculá tu cuota",
 };
 
 export const ticker = [
@@ -59,11 +59,10 @@ export const cifras: {
 ];
 
 export const proyectoSeccion = {
-  eyebrow: "01 / El proyecto",
   titulo: ["Descubrí el lugar donde", "proyectar tus sueños"],
   parrafos: [
     "En La Ribera pensamos en un lugar que acompañe cada etapa de tu vida: un espacio para crecer, compartir y construir esos recuerdos que mañana vas a querer volver a vivir.",
-    "269 lotes de entre 211 y 240 m², pensados para construir, crecer y hacer realidad tu próximo hogar.",
+    "269 lotes de entre 211 m² y 240 m², pensados para construir, crecer y hacer realidad tu próximo hogar.",
   ],
 };
 
@@ -71,7 +70,7 @@ export const servicios = {
   eyebrow: "03 / Servicios",
   titulo: ["Todo lo que necesitás,", "en un solo lugar"],
   bajada:
-    "La Ribera contará con la infraestructura completa de red, para que puedas pensar en tu futuro sin resolverlo por tu cuenta.",
+    "La Ribera cuenta con la infraestructura completa de red, para que puedas pensar en tu futuro sin resolverlo por tu cuenta.",
   items: [
     { nombre: "Gas natural", detalle: "Red domiciliaria en todo el loteo" },
     { nombre: "Electricidad", detalle: "Tendido y alumbrado público" },
@@ -82,9 +81,9 @@ export const servicios = {
 
 export const ubicacion = {
   eyebrow: "04 / Ubicación",
-  titulo: ["Loteo costero de Villa", "Gobernador Gálvez"],
+  titulo: ["Loteo costero de", "Villa Gobernador Gálvez"],
   bajada:
-    "Ubicado sobre la vera del río Paraná, a minutos del centro de VGG y con acceso directo a Rosario.",
+    "Ubicado a la vera del río Paraná, a minutos del centro de VGG y con acceso directo a Rosario.",
   // Calles y accesos tomados del plano de mensura y del plan de obras.
   // TODO: sumar distancias y tiempos verificados cuando el cliente los confirme.
   datos: [
@@ -129,7 +128,7 @@ export const actores = {
 
 export const vida = {
   eyebrow: "05 / La vida acá",
-  titulo: ["Un lugar para crecer hoy.", "Un hogar para recordar mañana."],
+  titulo: ["Un lugar para crecer hoy,", "un hogar para recordar mañana."],
   bajada:
     "El barrio no es sólo el lote. Es todo lo que pasa alrededor, todos los días.",
   /** Cards del carrusel. Los datos duros salen del plan de obras (agosto 2026). */
@@ -140,13 +139,13 @@ export const vida = {
       dato: "6.027 m²",
       titulo: "Espacios verdes propios",
       texto:
-        "Áreas públicas parquizadas y un plan de forestación con especies nativas, para que el barrio crezca a la sombra.",
+        "Áreas parquizadas, juegos para niños y un plan de forestación con especies nativas, para que el barrio crezca a la sombra.",
     },
     {
       img: "/img/reservorio-gym.webp",
       alt: "Reservorio de agua con estación de musculación al aire libre",
       dato: "4.240 m²",
-      titulo: "Reservorio y gimnasio al aire libre",
+      titulo: "Área recreativa",
       texto:
         "El reservorio regula los caudales de lluvia y ordena el agua del barrio. Alrededor, una estación de musculación abierta a todos.",
     },
@@ -173,8 +172,8 @@ export const financiacion = {
   eyebrow: "02 / Financiación",
   titulo: ["El sueño de la casa propia", "ya no es una idea lejana."],
   bajada:
-    "Elegí tu lote de la Manzana C, decinos cuánto podés entregar y mirá cómo queda tu cuota.",
-  cta: "Quiero reservar este lote",
+    "Completá cuánto podés entregar y mirá cómo queda tu cuota.",
+  cta: "Quiero asesoramiento",
 
   /**
    * Precios de "La Ribera COMERCIAL Lotes Manzana C.xlsx".
@@ -215,7 +214,7 @@ export const contacto = {
   eyebrow: "06 / Contacto",
   titulo: ["Dejanos tus datos", "y te contactamos"],
   bajada:
-    "Te escribimos con disponibilidad, valores y el detalle de la financiación de la etapa de lanzamiento.",
+    "Consultanos por la disponibilidad, los valores y el detalle de la financiación.",
 };
 
 export const legales =

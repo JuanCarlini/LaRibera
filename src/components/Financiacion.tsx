@@ -137,7 +137,7 @@ export function Financiacion() {
               <p className={`mt-2 text-xs ${plan.bajoMinimo ? "text-naranja" : "text-crema/50"}`}>
                 {plan.bajoMinimo
                   ? `El anticipo sugerido es de USD ${usd.format(f.anticipoMinimo)}. Con menos, consultá condiciones.`
-                  : `Anticipo de referencia: USD ${usd.format(f.anticipoMinimo)}.`}
+                  : `Anticipo mínimo sugerido: USD ${usd.format(f.anticipoMinimo)}.`}
               </p>
             </Campo>
 

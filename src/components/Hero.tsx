@@ -70,7 +70,7 @@ export function Hero() {
               {hero.ctaPrimario}
               <Flecha />
             </BotonPrimario>
-            <BotonSecundario href="#proyecto" className="text-crema">
+            <BotonSecundario href="#financiacion" className="text-crema">
               {hero.ctaSecundario}
             </BotonSecundario>
           </div>

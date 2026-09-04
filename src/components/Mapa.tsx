@@ -290,10 +290,12 @@ function PieDePlano({ onAmpliar }: { onAmpliar: () => void }) {
 
 /** Fuera del mapa: tapar la atribución de Google va contra sus condiciones. */
 function Aclaracion() {
-  if (preciso) return null;
   return (
     <p className="mt-3 text-xs text-verde/55">
-      El plano definitivo del loteo se publica al lanzamiento.
+      {!preciso && "El plano definitivo del loteo se publica al lanzamiento. "}
+      {/* El trazado de las calles sale de OpenStreetMap, que es ODbL y pide
+          atribución en las obras derivadas. */}
+      Trazado de calles © colaboradores de OpenStreetMap.
     </p>
   );
 }

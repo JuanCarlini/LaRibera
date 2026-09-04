@@ -124,6 +124,7 @@ export const actores = {
     {
       rol: "Desarrolla",
       nombre: "Asociación Mutual 18 de Julio",
+      sitio: "https://mutual18dejulio.org/",
       logo: "/img/logo-mutual.webp",
       ancho: 700,
       alto: 179,
@@ -132,6 +133,8 @@ export const actores = {
     {
       rol: "Comercializa",
       nombre: "Qala Desarrollos",
+      // Su sitio se sirve por http y redirige a https: enlazamos el destino.
+      sitio: "https://qaladesarrollos.com.ar/",
       logo: "/img/logo-qala.webp",
       ancho: 292,
       alto: 151,

@@ -24,8 +24,15 @@ export function Actores() {
               </p>
 
               {/* Caja de alto fijo para que los dos logos queden alineados
-                  aunque tengan proporciones muy distintas. */}
-              <div className="mt-5 flex h-12 items-center md:h-16">
+                  aunque tengan proporciones muy distintas. El enlace la ocupa
+                  entera, así el área táctil no se limita al dibujo del logo. */}
+              <a
+                href={a.sitio}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Ir al sitio de ${a.nombre}`}
+                className="mt-5 flex h-12 w-fit items-center rounded transition-opacity hover:opacity-70 md:h-16"
+              >
                 <Image
                   src={a.logo}
                   alt={a.nombre}
@@ -35,7 +42,7 @@ export function Actores() {
                   className="w-auto max-w-full object-contain object-left"
                   style={{ height: `${a.escala * 100}%` }}
                 />
-              </div>
+              </a>
             </li>
           ))}
         </ul>

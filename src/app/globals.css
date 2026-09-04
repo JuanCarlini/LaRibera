@@ -44,9 +44,9 @@
 }
 
 @layer components {
-  /* Etiqueta de sección numerada: "01 / EL PROYECTO" */
+  /* Etiqueta de sección: "EL PROYECTO", "FINANCIACIÓN". Sin numerar. */
   .eyebrow {
-    @apply text-[0.7rem] font-semibold tracking-[0.22em] uppercase;
+    @apply text-[0.85rem] font-semibold tracking-[0.18em] uppercase;
   }
 
   .contenedor {

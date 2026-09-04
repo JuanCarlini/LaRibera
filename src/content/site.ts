@@ -59,6 +59,7 @@ export const cifras: {
 ];
 
 export const proyectoSeccion = {
+  eyebrow: "El proyecto",
   titulo: ["Descubrí el lugar donde", "proyectar tus sueños"],
   parrafos: [
     "En La Ribera pensamos en un lugar que acompañe cada etapa de tu vida: un espacio para crecer, compartir y construir esos recuerdos que mañana vas a querer volver a vivir.",
@@ -67,7 +68,7 @@ export const proyectoSeccion = {
 };
 
 export const servicios = {
-  eyebrow: "03 / Servicios",
+  eyebrow: "Servicios",
   titulo: ["Todo lo que necesitás,", "en un solo lugar"],
   bajada:
     "La Ribera cuenta con la infraestructura completa de red, para que puedas pensar en tu futuro sin resolverlo por tu cuenta.",
@@ -80,7 +81,7 @@ export const servicios = {
 };
 
 export const ubicacion = {
-  eyebrow: "04 / Ubicación",
+  eyebrow: "Ubicación",
   titulo: ["Loteo costero de", "Villa Gobernador Gálvez"],
   bajada:
     "Ubicado a la vera del río Paraná, a minutos del centro de VGG y con acceso directo a Rosario.",
@@ -127,7 +128,7 @@ export const actores = {
 };
 
 export const vida = {
-  eyebrow: "05 / La vida acá",
+  eyebrow: "La vida acá",
   titulo: ["Un lugar para crecer hoy,", "un hogar para recordar mañana."],
   bajada:
     "El barrio no es sólo el lote. Es todo lo que pasa alrededor, todos los días.",
@@ -169,7 +170,7 @@ export const vida = {
 };
 
 export const financiacion = {
-  eyebrow: "02 / Financiación",
+  eyebrow: "Financiación",
   titulo: ["El sueño de la casa propia", "ya no es una idea lejana."],
   bajada:
     "Completá cuánto podés entregar y mirá cómo queda tu cuota.",
@@ -211,7 +212,7 @@ export const financiacion = {
 };
 
 export const contacto = {
-  eyebrow: "06 / Contacto",
+  eyebrow: "Contacto",
   titulo: ["Dejanos tus datos", "y te contactamos"],
   bajada:
     "Consultanos por la disponibilidad, los valores y el detalle de la financiación.",

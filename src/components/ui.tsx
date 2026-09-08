@@ -6,13 +6,16 @@ export const waHref = `https://wa.me/${proyecto.whatsapp}?text=${encodeURICompon
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold tracking-wide transition-colors duration-200";
 
+/**
+ * Superficie naranja de marca. El texto va en verde profundo y no en crema:
+ * crema sobre #fc6011 da 2,45:1 y no llega a AA; el verde da 5,47:1. En hover
+ * el naranja se aclara —en vez de apagarse— y el contraste sube a 6,62:1.
+ */
+export const superficieNaranja =
+  "bg-naranja text-verde-900 transition-colors duration-200 hover:bg-naranja-400";
+
 export function BotonPrimario({ className = "", ...props }: ComponentProps<"a">) {
-  return (
-    <a
-      {...props}
-      className={`${base} bg-naranja text-crema hover:bg-naranja-600 ${className}`}
-    />
-  );
+  return <a {...props} className={`${base} ${superficieNaranja} ${className}`} />;
 }
 
 export function BotonSecundario({
@@ -35,6 +38,96 @@ export function Eyebrow({
   className?: string;
 }) {
   return <p className={`eyebrow ${className}`}>{children}</p>;
+}
+
+/* --------------------------------------------------------------------------
+   Encabezado de sección
+   Un único componente para las seis secciones: mismo salto entre etiqueta,
+   titular y bajada, y la misma grilla de 12 columnas. Antes cada sección
+   repetía la estructura con mt-4 / mt-5 / mt-6 distintos y con anchos que no
+   coincidían entre sí.
+   -------------------------------------------------------------------------- */
+
+/** `claro` = sobre crema (verde + naranja oscuro). `oscuro` = sobre verde (lima + naranja). */
+type Tono = "claro" | "oscuro";
+
+const tonos = {
+  claro: {
+    eyebrow: "text-verde/70",
+    primera: "text-verde",
+    segunda: "text-naranja-600",
+    bajada: "text-verde/75",
+  },
+  oscuro: {
+    eyebrow: "text-lima",
+    primera: "text-lima",
+    segunda: "text-naranja",
+    bajada: "text-crema/70",
+  },
+} as const;
+
+export function Encabezado({
+  eyebrow,
+  titulo,
+  bajada,
+  tono = "claro",
+  /** Pone la bajada en una segunda columna, alineada al tope del titular. */
+  dividido = false,
+  anchoBajada = "max-w-xl",
+  className = "",
+}: {
+  eyebrow: string;
+  titulo: readonly string[];
+  bajada?: ReactNode;
+  tono?: Tono;
+  dividido?: boolean;
+  anchoBajada?: string;
+  className?: string;
+}) {
+  const t = tonos[tono];
+
+  const titular = (
+    <h2 className="titular">
+      <span className={`block ${t.primera}`}>{titulo[0]}</span>
+      <span className={`block ${t.segunda}`}>{titulo[1]}</span>
+    </h2>
+  );
+
+  const cuerpo = bajada && (
+    <div className={`space-y-5 ${t.bajada}`} style={{ fontSize: "var(--text-bajada)" }}>
+      {bajada}
+    </div>
+  );
+
+  return (
+    <header className={className}>
+      <p className={`eyebrow ${t.eyebrow}`} data-reveal>
+        {eyebrow}
+      </p>
+
+      {dividido ? (
+        <div className="mt-6 grid gap-x-16 gap-y-8 md:grid-cols-12">
+          <div className="md:col-span-7" data-reveal>
+            {titular}
+          </div>
+          {cuerpo && (
+            <div
+              className="md:col-span-5"
+              data-reveal
+              style={{ "--reveal-delay": "140ms" } as React.CSSProperties}
+            >
+              {cuerpo}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6" data-reveal>
+          {titular}
+          {cuerpo && <div className={`mt-6 ${anchoBajada}`}>{cuerpo}</div>}
+        </div>
+      )}
+    </header>
+  );
 }
 
 export function IconoWhatsapp({ className = "" }: { className?: string }) {

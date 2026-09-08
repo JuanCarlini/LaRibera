@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
-import { IconoWhatsapp, waHref } from "./ui";
+import { IconoWhatsapp, superficieNaranja, waHref } from "./ui";
 import { nav } from "@/content/site";
+import { useBloquearScroll } from "./bloquear-scroll";
 
 export function Nav() {
   const [pegado, setPegado] = useState(false);
@@ -17,12 +18,7 @@ export function Nav() {
   }, []);
 
   // Con el menú mobile abierto no queremos que el fondo scrollee.
-  useEffect(() => {
-    document.body.style.overflow = abierto ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [abierto]);
+  useBloquearScroll(abierto);
 
   return (
     <header
@@ -61,7 +57,7 @@ export function Nav() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center gap-2 rounded-full bg-naranja px-5 py-2.5 text-sm font-bold text-crema transition-colors hover:bg-naranja-600 sm:inline-flex"
+            className={`hidden items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold sm:inline-flex ${superficieNaranja}`}
           >
             <IconoWhatsapp />
             WhatsApp
@@ -106,7 +102,7 @@ export function Nav() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-naranja px-6 py-3.5 font-bold text-crema"
+            className={`mt-6 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold ${superficieNaranja}`}
           >
             <IconoWhatsapp />
             Escribinos por WhatsApp

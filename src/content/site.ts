@@ -4,6 +4,9 @@
  * Todo lo marcado con TODO: espera dato firme del cliente.
  */
 
+/** Origen público del sitio. Lo usan metadata, sitemap y robots. */
+export const sitio = "https://lariberavgg.com.ar";
+
 export const proyecto = {
   nombre: "La Ribera",
   bajada: "Barrio Residencial Abierto",
@@ -217,7 +220,8 @@ export const financiacion = {
     casa: "blue" as const,
     nombre: "Dólar blue",
     respaldo: 1545,
-    respaldoFecha: "3 de septiembre de 2026",
+    /** ISO, para poder medir cuánto envejeció el respaldo si la API no responde. */
+    respaldoDesde: "2026-09-03",
   },
 
   // El índice CAC vive en `cac.json` y lo refresca `tools/actualizar-cac.mjs`,
@@ -232,6 +236,14 @@ export const contacto = {
   titulo: ["Dejanos tus datos", "y te contactamos"],
   bajada:
     "Consultanos por la disponibilidad, los valores y el detalle de la financiación.",
+  // TODO: revisar con el cliente cuando exista la política de privacidad y
+  // enlazarla desde acá.
+  datos:
+    "Usamos tus datos únicamente para responder esta consulta. No los compartimos con terceros.",
+  /** Qué ve el visitante después de apretar Enviar. */
+  abierto: "Listo: te abrimos WhatsApp con la consulta cargada.",
+  bloqueado: "El navegador bloqueó la ventana de WhatsApp.",
+  reintento: "Abrir la consulta en WhatsApp",
 };
 
 export const legales =

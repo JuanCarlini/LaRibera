@@ -7,21 +7,19 @@ import { actores } from "@/content/site";
  */
 export function Actores() {
   return (
-    <section className="bg-verde pt-14 pb-4 text-crema md:pt-20 md:pb-6">
+    <section className="bg-verde pt-24 text-crema md:pt-32">
       <div className="contenedor">
-        <p className="eyebrow text-crema/45">{actores.eyebrow}</p>
+        <p className="eyebrow text-crema/65">{actores.eyebrow}</p>
 
-        <ul className="mt-8 grid gap-10 sm:grid-cols-2 sm:gap-12 md:mt-10">
+        <ul className="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-12">
           {actores.items.map((a, i) => (
             <li
               key={a.rol}
-              className="border-t border-crema/15 pt-6"
+              className="border-t border-crema/20 pt-6"
               data-reveal
               style={{ "--reveal-delay": `${i * 120}ms` } as React.CSSProperties}
             >
-              <p className="text-[0.7rem] font-semibold tracking-[0.18em] text-lima uppercase">
-                {a.rol}
-              </p>
+              <p className="eyebrow text-lima">{a.rol}</p>
 
               {/* Caja de alto fijo para que los dos logos queden alineados
                   aunque tengan proporciones muy distintas. El enlace la ocupa
@@ -31,7 +29,7 @@ export function Actores() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Ir al sitio de ${a.nombre}`}
-                className="mt-5 flex h-12 w-fit items-center rounded transition-opacity hover:opacity-70 md:h-16"
+                className="mt-6 flex h-12 w-fit items-center rounded transition-opacity hover:opacity-70 md:h-16"
               >
                 <Image
                   src={a.logo}

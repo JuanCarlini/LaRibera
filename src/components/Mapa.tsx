@@ -6,10 +6,20 @@ import { PlanoAmpliado } from "./PlanoAmpliado";
 import { ubicacion, proyecto } from "@/content/site";
 import geo from "@/content/mapa.json";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * El SDK de Maps se inyecta por <script> y no trae tipos: acotamos el `any` a
+ * este alias en vez de apagar la regla en todo el archivo.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Sdk = any;
+
 declare global {
   interface Window {
-    google?: any;
+    google?: { maps: Sdk };
+    /** Lo llama Google cuando la clave no autoriza el dominio, venció o le falta facturación. */
+    gm_authFailure?: () => void;
+    /** Callback que le pasamos a la URL del SDK para saber cuándo terminó de cargar. */
+    __mapaRiberaListo?: () => void;
   }
 }
 
@@ -42,15 +52,20 @@ function cargarSdk(clave: string) {
   cargando = new Promise<void>((resolver, rechazar) => {
     // loading=async + callback es el patrón que pide Google; sin él tira un
     // warning de performance en consola.
+    window.__mapaRiberaListo = () => resolver();
     const nombreCallback = "__mapaRiberaListo";
-    (window as any)[nombreCallback] = () => resolver();
 
     const s = document.createElement("script");
     s.src =
       `https://maps.googleapis.com/maps/api/js?key=${clave}` +
       `&v=weekly&language=es-419&region=AR&loading=async&callback=${nombreCallback}`;
     s.async = true;
-    s.onerror = () => rechazar(new Error("No se pudo cargar Google Maps"));
+    s.onerror = () => {
+      // Sin esto la promesa rechazada queda cacheada para siempre y un fallo
+      // de red pasajero deja el mapa muerto hasta recargar la página.
+      cargando = null;
+      rechazar(new Error("No se pudo cargar Google Maps"));
+    };
     document.head.appendChild(s);
   });
 
@@ -73,14 +88,14 @@ export type Resalte = "frentes" | "rotonda" | "rio" | null;
 
 export function Mapa({ resalte = null }: { resalte?: Resalte }) {
   const contenedor = useRef<HTMLDivElement>(null);
-  const mapa = useRef<any>(null);
+  const mapa = useRef<Sdk>(null);
   const [vistaElegida, setVista] = useState<"zona" | "predio">("zona");
   // Con el plano a la vista el resalte no se vería, así que mientras haya uno
   // activo mandamos el mapa. Derivado y no seteado: evita un render de más.
   const vista = resalte ? "zona" : vistaElegida;
   const [error, setError] = useState(false);
   const [ampliado, setAmpliado] = useState(false);
-  const trazos = useRef<any[]>([]);
+  const trazos = useRef<Sdk[]>([]);
 
   useEffect(() => {
     if (!CLAVE || !contenedor.current) return;
@@ -89,13 +104,13 @@ export function Mapa({ resalte = null }: { resalte?: Resalte }) {
     // Google avisa por acá cuando la clave no autoriza este dominio, venció o
     // le falta facturación. Sin esto pinta su propio cartel de error adentro
     // del marco; con esto caemos al plano, que al menos es contenido útil.
-    (window as any).gm_authFailure = () => {
+    window.gm_authFailure = () => {
       if (vivo) setError(true);
     };
 
     cargarSdk(CLAVE)
       .then(() => {
-        if (!vivo || !contenedor.current) return;
+        if (!vivo || !contenedor.current || !window.google) return;
         const g = window.google.maps;
 
         mapa.current = new g.Map(contenedor.current, {
@@ -135,6 +150,7 @@ export function Mapa({ resalte = null }: { resalte?: Resalte }) {
 
     return () => {
       vivo = false;
+      delete window.gm_authFailure;
     };
   }, []);
 
@@ -202,6 +218,8 @@ export function Mapa({ resalte = null }: { resalte?: Resalte }) {
             mapa no necesita reinicializarse ni recalcular su tamaño. */}
         <div
           ref={contenedor}
+          role="region"
+          aria-label={`Mapa de ${proyecto.nombre} y su zona`}
           className={`absolute inset-0 transition-opacity duration-300 ${
             vista === "zona" ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
@@ -275,12 +293,14 @@ function Predio() {
 
 function PieDePlano({ onAmpliar }: { onAmpliar: () => void }) {
   return (
-    <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-verde/55">
+    <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-verde/70">
       <span>Plano de mensura · 269 lotes de 211 a 240 m²</span>
       <button
         type="button"
         onClick={onAmpliar}
-        className="font-bold text-naranja-600 underline underline-offset-2"
+        // A este cuerpo el naranja oscuro sobre crema da 3,14:1: el texto va
+        // en verde y el naranja queda en el subrayado.
+        className="font-bold text-verde underline decoration-naranja-600 decoration-2 underline-offset-2 hover:decoration-verde"
       >
         Ampliar plano
       </button>
@@ -291,7 +311,7 @@ function PieDePlano({ onAmpliar }: { onAmpliar: () => void }) {
 /** Fuera del mapa: tapar la atribución de Google va contra sus condiciones. */
 function Aclaracion() {
   return (
-    <p className="mt-3 text-xs text-verde/55">
+    <p className="mt-3 text-xs text-verde/70">
       {!preciso && "El plano definitivo del loteo se publica al lanzamiento. "}
       {/* El trazado de las calles sale de OpenStreetMap, que es ODbL y pide
           atribución en las obras derivadas. */}

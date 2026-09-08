@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Wave } from "./Wave";
-import { Eyebrow } from "./ui";
+import { Encabezado } from "./ui";
 import { servicios as s } from "@/content/site";
 
 // Íconos de trazo, mismo grosor y caja, para que se lean como una familia.
@@ -41,34 +41,16 @@ export function Servicios() {
         <Wave className="absolute inset-x-0 bottom-0 text-verde" />
       </div>
 
-      <div className="contenedor pb-24 md:pb-32">
-        <div className="grid gap-10 md:grid-cols-12 md:gap-16">
-          <div className="md:col-span-7" data-reveal>
-            <Eyebrow className="text-lima">{s.eyebrow}</Eyebrow>
-            <h2 className="titular mt-5">
-              <span className="block text-lima">{s.titulo[0]}</span>
-              <span className="block text-naranja">{s.titulo[1]}</span>
-            </h2>
-          </div>
-          <p
-            className="self-end text-crema/70 md:col-span-5"
-            data-reveal
-            style={
-              {
-                fontSize: "var(--text-bajada)",
-                "--reveal-delay": "140ms",
-              } as React.CSSProperties
-            }
-          >
-            {s.bajada}
-          </p>
-        </div>
+      {/* La onda apoya sobre el borde inferior de la foto: sin este aire, la
+          etiqueta de sección quedaba pegada a la imagen. */}
+      <div className="contenedor pt-20 pb-24 md:pt-28 md:pb-32">
+        <Encabezado eyebrow={s.eyebrow} titulo={s.titulo} bajada={<p>{s.bajada}</p>} tono="oscuro" dividido />
 
-        <ul className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-20 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {s.items.map((item, i) => (
             <li
               key={item.nombre}
-              className="border-t-2 border-crema/15 pt-6"
+              className="border-t border-crema/20 pt-6"
               data-reveal
               style={{ "--reveal-delay": `${i * 100}ms` } as React.CSSProperties}
             >
@@ -85,7 +67,7 @@ export function Servicios() {
                 {iconos[item.nombre]}
               </svg>
               <h3 className="mt-5 text-2xl font-extrabold text-lima">{item.nombre}</h3>
-              <p className="mt-2 text-sm text-crema/60">{item.detalle}</p>
+              <p className="mt-2 text-sm text-crema/70">{item.detalle}</p>
             </li>
           ))}
         </ul>

@@ -14,9 +14,11 @@ export function Hero() {
         sizes="100vw"
         className="object-cover object-center"
       />
-      {/* El degradado sostiene la legibilidad del titular sobre la foto */}
-      <div className="absolute inset-0 bg-gradient-to-t from-verde-900/90 via-verde-900/30 to-verde-900/10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-verde-900/65 via-verde-900/15 to-transparent" />
+      {/* Dos degradados sostienen la legibilidad sobre la foto: el vertical
+          apoya el bloque de texto y el lateral protege la columna izquierda,
+          que cae sobre los campos claros de la vista aérea. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-verde-900/95 via-verde-900/55 to-verde-900/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-verde-900/75 via-verde-900/30 to-transparent" />
 
       <div className="contenedor relative flex min-h-[100svh] flex-col justify-end pt-32 pb-[14vw]">
         <div className="max-w-3xl">
@@ -62,7 +64,7 @@ export function Hero() {
           </p>
 
           <div
-            className="mt-10 flex flex-wrap gap-3"
+            className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
             data-reveal
             style={{ "--reveal-delay": "440ms" } as React.CSSProperties}
           >

@@ -1,56 +1,44 @@
 import { Contador } from "./Contador";
-import { Eyebrow } from "./ui";
+import { Encabezado } from "./ui";
 import { cifras, proyectoSeccion as s } from "@/content/site";
 
 export function Proyecto() {
   return (
-    <section id="proyecto" className="bg-crema py-24 md:py-32">
+    <section id="proyecto" className="seccion bg-crema">
       <div className="contenedor">
-        <div className="grid gap-10 md:grid-cols-12 md:gap-16">
-          <div className="md:col-span-7" data-reveal>
-            <Eyebrow className="text-verde/65">{s.eyebrow}</Eyebrow>
-            {/* Sobre fondo claro usamos verde + naranja oscuro: el lima y el
-                naranja puro de las piezas de RRSS no llegan al contraste AA. */}
-            <h2 className="titular mt-5">
-              <span className="block text-verde">{s.titulo[0]}</span>
-              <span className="block text-naranja-600">{s.titulo[1]}</span>
-            </h2>
-          </div>
+        {/* Sobre fondo claro usamos verde + naranja oscuro: el lima y el
+            naranja puro de las piezas de RRSS no llegan al contraste AA. */}
+        <Encabezado
+          eyebrow={s.eyebrow}
+          titulo={s.titulo}
+          dividido
+          bajada={s.parrafos.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        />
 
-          <div
-            className="space-y-5 self-end text-verde/80 md:col-span-5"
-            data-reveal
-            style={{ "--reveal-delay": "140ms" } as React.CSSProperties}
-          >
-            {s.parrafos.map((p) => (
-              <p key={p} style={{ fontSize: "var(--text-bajada)" }}>
-                {p}
-              </p>
-            ))}
-          </div>
-        </div>
-
-        <dl className="mt-20 grid gap-px overflow-hidden rounded-3xl bg-verde/15 sm:grid-cols-3">
+        {/* Filetes en lugar de una caja redondeada: así la primera cifra
+            arranca en la misma vertical que el titular y la franja comparte
+            el sistema de reglas de Servicios y Ubicación. */}
+        <dl className="mt-20 grid divide-y divide-verde/20 border-y border-verde/20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {cifras.map((c, i) => (
             <div
               key={c.label}
-              className="bg-crema p-8 md:p-10"
+              className="flex flex-col py-8 sm:px-10 sm:first:pl-0 sm:last:pr-0 md:py-10"
               data-reveal
               style={{ "--reveal-delay": `${i * 110}ms` } as React.CSSProperties}
             >
-              <dd className="text-5xl leading-none font-extrabold tracking-[-0.03em] text-verde md:text-6xl">
+              <dd className="order-1 text-5xl leading-none font-extrabold tracking-[-0.03em] text-verde md:text-6xl">
                 <Contador valor={c.valor} sufijo={c.hasta ? "" : c.sufijo} />
                 {c.hasta && (
                   <>
-                    <span className="text-naranja">–</span>
+                    <span className="text-naranja-600">–</span>
                     <Contador valor={c.hasta} sufijo={c.sufijo} />
                   </>
                 )}
               </dd>
-              <dt className="mt-4">
-                <span className="block text-lg font-bold text-verde">{c.label}</span>
-                <span className="block text-sm text-verde/60">{c.detalle}</span>
-              </dt>
+              <dt className="order-2 mt-5 text-lg font-bold text-verde">{c.label}</dt>
+              <dd className="order-3 text-sm text-verde/70">{c.detalle}</dd>
             </div>
           ))}
         </dl>

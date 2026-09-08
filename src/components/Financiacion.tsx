@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Eyebrow, Flecha, IconoWhatsapp } from "./ui";
+import { Encabezado, Flecha, IconoWhatsapp, superficieNaranja } from "./ui";
 import { financiacion as f, proyecto } from "@/content/site";
 import cac from "@/content/cac.json";
 
@@ -10,14 +10,23 @@ const pesos = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 const metros = new Intl.NumberFormat("es-AR", { minimumFractionDigits: 2 });
 const puntos = new Intl.NumberFormat("es-AR", { minimumFractionDigits: 1 });
 
-type Cotizacion = { valor: number; envivo: boolean; fecha: string };
+type Cotizacion = { valor: number; envivo: boolean; fecha: string; vieja: boolean };
+
+/** A partir de acá el respaldo deja de ser una referencia razonable. */
+const DIAS_DE_TOLERANCIA = 45;
+
+// Formateado a mano y no con toLocaleDateString: esto corre igual en el
+// servidor y en el cliente, y con la zona horaria de por medio no coincidían.
+const [anio, mes, dia] = f.cotizacion.respaldoDesde.split("-");
+const FECHA_RESPALDO = `${dia}/${mes}/${anio}`;
 
 /** Cotización de dolarapi.com. Si falla, queda el valor de respaldo del contenido. */
 function useCotizacion(): Cotizacion {
   const [cot, setCot] = useState<Cotizacion>({
     valor: f.cotizacion.respaldo,
     envivo: false,
-    fecha: f.cotizacion.respaldoFecha,
+    fecha: FECHA_RESPALDO,
+    vieja: false,
   });
 
   useEffect(() => {
@@ -30,9 +39,19 @@ function useCotizacion(): Cotizacion {
           valor: d.venta,
           envivo: true,
           fecha: new Date(d.fechaActualizacion).toLocaleDateString("es-AR"),
+          vieja: false,
         });
       })
-      .catch(() => {});
+      .catch(() => {
+        // Si la API no responde mostramos el respaldo, pero avisando cuando ya
+        // quedó viejo: si no, la página sigue calculando cuotas en pesos con un
+        // dólar de hace meses y nadie se entera. El cálculo va acá y no en el
+        // render para que el HTML del servidor y el del cliente coincidan.
+        if (!vivo) return;
+        const dias =
+          (Date.now() - new Date(`${f.cotizacion.respaldoDesde}T12:00:00`).getTime()) / 86_400_000;
+        if (dias > DIAS_DE_TOLERANCIA) setCot((c) => ({ ...c, vieja: true }));
+      });
     return () => {
       vivo = false;
     };
@@ -74,21 +93,22 @@ export function Financiacion() {
   )}`;
 
   return (
-    <section id="financiacion" className="bg-verde py-20 text-crema md:py-28">
+    <section id="financiacion" className="seccion bg-verde text-crema">
       <div className="contenedor">
-        <header className="max-w-2xl" data-reveal>
-          <Eyebrow className="text-lima">{f.eyebrow}</Eyebrow>
-          <h2 className="titular mt-4">
-            <span className="block text-lima">{f.titulo[0]}</span>
-            <span className="block text-naranja">{f.titulo[1]}</span>
-          </h2>
-          <p className="mt-5 text-crema/70" style={{ fontSize: "var(--text-bajada)" }}>
-            {f.bajada}
-          </p>
-        </header>
+        <Encabezado
+          eyebrow={f.eyebrow}
+          titulo={f.titulo}
+          bajada={<p>{f.bajada}</p>}
+          tono="oscuro"
+          dividido
+        />
 
+        {/* El panel de resultado llevaba el mismo verde que la sección y la
+            tarjeta parecía cortada al medio. Ahora las dos mitades apoyan
+            sobre verde-900 y el resultado se separa por una superficie
+            apenas más clara, no por el fondo de la página. */}
         <div
-          className="mt-10 overflow-hidden rounded-3xl bg-verde-900 md:mt-14 md:grid md:grid-cols-[1.05fr_1fr]"
+          className="mt-16 overflow-hidden rounded-3xl bg-verde-900 ring-1 ring-crema/10 md:grid md:grid-cols-[1.05fr_1fr]"
           data-reveal
         >
           {/* ---------- lo que elige el visitante ---------- */}
@@ -110,10 +130,10 @@ export function Financiacion() {
                       }`}
                     >
                       <span className="block font-bold">USD {usd.format(l.precio)}</span>
-                      <span className="mt-1 block text-xs text-crema/55">
+                      <span className="mt-1 block text-xs text-crema/65">
                         {metros.format(l.m2)} m² · {l.disponibles} disponibles
                       </span>
-                      <span className="mt-0.5 block text-xs text-crema/40">{l.detalle}</span>
+                      <span className="mt-0.5 block text-xs text-crema/60">{l.detalle}</span>
                     </button>
                   );
                 })}
@@ -122,7 +142,7 @@ export function Financiacion() {
 
             <Campo etiqueta="Cuánto podés entregar">
               <div className="flex items-center gap-3 rounded-2xl border-2 border-crema/15 px-4 focus-within:border-naranja">
-                <span className="text-sm font-bold text-crema/40">USD</span>
+                <span className="text-sm font-bold text-crema/60">USD</span>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -134,7 +154,7 @@ export function Financiacion() {
                   className="w-full bg-transparent py-3.5 text-lg font-bold outline-none"
                 />
               </div>
-              <p className={`mt-2 text-xs ${plan.bajoMinimo ? "text-naranja" : "text-crema/50"}`}>
+              <p className={`mt-2 text-xs ${plan.bajoMinimo ? "text-naranja" : "text-crema/65"}`}>
                 {plan.bajoMinimo
                   ? `El anticipo sugerido es de USD ${usd.format(f.anticipoMinimo)}. Con menos, consultá condiciones.`
                   : `Anticipo mínimo sugerido: USD ${usd.format(f.anticipoMinimo)}.`}
@@ -159,22 +179,22 @@ export function Financiacion() {
                   </button>
                 ))}
               </div>
-              <p className="mt-2 text-xs text-crema/50">{f.notaPlazo}</p>
+              <p className="mt-2 text-xs text-crema/65">{f.notaPlazo}</p>
             </Campo>
           </div>
 
           {/* ---------- lo que le devolvemos ---------- */}
-          <div className="border-t border-crema/10 bg-verde p-6 md:border-t-0 md:border-l md:p-9">
-            <p className="eyebrow text-crema/45">Tu cuota estimada</p>
+          <div className="border-t border-crema/10 bg-crema/[0.045] p-6 md:border-t-0 md:border-l md:p-9">
+            <p className="eyebrow text-crema/60">Tu cuota estimada</p>
 
             <p className="mt-3 text-4xl leading-none font-extrabold tracking-[-0.03em] text-lima md:text-5xl">
               ${pesos.format(cuotaPesos)}
-              <span className="text-lg font-semibold text-crema/50"> /mes</span>
+              <span className="ml-1.5 text-lg font-semibold text-crema/60">/mes</span>
             </p>
             <p className="mt-1.5 text-base font-bold text-naranja">
               + ${pesos.format(ajusteCac)} de CAC en pesos estimado
             </p>
-            <p className="mt-3 text-sm text-crema/60">
+            <p className="mt-3 text-sm text-crema/70">
               Equivale a <strong className="text-crema">USD {usd.format(plan.cuotaUsd)}</strong> por
               mes
             </p>
@@ -189,13 +209,17 @@ export function Financiacion() {
               />
             </dl>
 
-            <div className="mt-6 space-y-1.5 border-t border-crema/10 pt-5 text-xs text-crema/50">
-              <p>
+            <div className="mt-6 space-y-1.5 border-t border-crema/10 pt-5 text-xs text-crema/65">
+              <p className={cotizacion.vieja ? "text-naranja" : undefined}>
                 {f.cotizacion.nombre}:{" "}
-                <strong className="text-crema/75">${pesos.format(cotizacion.valor)}</strong>{" "}
+                <strong className={cotizacion.vieja ? "font-bold" : "text-crema/75"}>
+                  ${pesos.format(cotizacion.valor)}
+                </strong>{" "}
                 {cotizacion.envivo
                   ? `· cotización del ${cotizacion.fecha}`
                   : `· valor de referencia al ${cotizacion.fecha}`}
+                {cotizacion.vieja &&
+                  ". No pudimos actualizarla y ya quedó vieja: consultá el valor de la cuota antes de decidir."}
               </p>
               <p>
                 Índice CAC (CAMARCO) de {cac.periodo}:{" "}
@@ -212,7 +236,7 @@ export function Financiacion() {
               href={consulta}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-naranja px-6 py-4 font-bold text-crema transition-colors hover:bg-naranja-600"
+              className={`mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-bold ${superficieNaranja}`}
             >
               <IconoWhatsapp />
               {f.cta}
@@ -221,7 +245,7 @@ export function Financiacion() {
           </div>
         </div>
 
-        <p className="mt-6 max-w-4xl text-xs leading-relaxed text-crema/45">{f.legales}</p>
+        <p className="mt-6 max-w-4xl text-xs leading-relaxed text-crema/60">{f.legales}</p>
       </div>
     </section>
   );
@@ -230,7 +254,7 @@ export function Financiacion() {
 function Campo({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="eyebrow mb-3 text-crema/45">{etiqueta}</p>
+      <p className="eyebrow mb-3 text-crema/60">{etiqueta}</p>
       {children}
     </div>
   );
@@ -239,7 +263,7 @@ function Campo({ etiqueta, children }: { etiqueta: string; children: React.React
 function Fila({ termino, valor }: { termino: string; valor: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4">
-      <dt className="text-crema/55">{termino}</dt>
+      <dt className="text-crema/65">{termino}</dt>
       <dd className="font-bold tabular-nums">{valor}</dd>
     </div>
   );

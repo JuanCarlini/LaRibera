@@ -10,10 +10,9 @@ export const sitio = "https://lariberavgg.com.ar";
 export const proyecto = {
   nombre: "La Ribera",
   bajada: "Barrio Residencial Abierto",
-  // TODO: confirmar el número con el cliente — el 3385 no corresponde a VGG (área 341).
-  whatsapp: "5493385437168",
-  whatsappVisible: "+54 9 3385 43-7168",
-  email: "ventas@lariberavgg.com.ar", // TODO: casilla real
+  whatsapp: "5493412852471",
+  whatsappVisible: "+54 9 341 285-2471",
+  email: "lariberavgg@gmail.com",
   ubicacion: "Villa Gobernador Gálvez, Santa Fe",
 };
 

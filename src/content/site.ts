@@ -5,7 +5,7 @@
  */
 
 /** Origen público del sitio. Lo usan metadata, sitemap y robots. */
-export const sitio = "https://lariberavgg.com.ar";
+export const sitio = "https://www.lariberavgg.com";
 
 export const proyecto = {
   nombre: "La Ribera",

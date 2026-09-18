@@ -217,7 +217,7 @@ export const financiacion = {
    */
   cotizacion: {
     casa: "blue" as const,
-    nombre: "Dólar blue",
+    nombre: "Dólar",
     respaldo: 1545,
     /** ISO, para poder medir cuánto envejeció el respaldo si la API no responde. */
     respaldoDesde: "2026-09-03",

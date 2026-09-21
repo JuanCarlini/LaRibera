@@ -37,6 +37,9 @@ export function Contacto() {
     const url = `https://wa.me/${proyecto.whatsapp}?text=${encodeURIComponent(texto)}`;
     const ventana = window.open(url, "_blank", "noopener,noreferrer");
     setEnvio({ estado: ventana ? "abierto" : "bloqueado", url });
+    // Recién acá: el submit ya pasó la validación nativa del form. Si Umami
+    // está bloqueado por un adblocker, `window.umami` no existe y no pasa nada.
+    window.umami?.track("form-contacto");
   };
 
   // pt-0 / pb-2: con el campo vacío, la etiqueta tiene que quedar más cerca
@@ -60,6 +63,7 @@ export function Contacto() {
             href={`https://wa.me/${proyecto.whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-umami-event="wsp-contacto"
             className="mt-10 inline-flex items-center gap-3 rounded-full border-2 border-crema/30 px-6 py-3.5 font-bold transition-colors hover:border-lima hover:text-lima"
             data-reveal
           >

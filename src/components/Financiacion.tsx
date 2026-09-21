@@ -20,6 +20,24 @@ const DIAS_DE_TOLERANCIA = 45;
 const [anio, mes, dia] = f.cotizacion.respaldoDesde.split("-");
 const FECHA_RESPALDO = `${dia}/${mes}/${anio}`;
 
+/** El anticipo nunca baja del mínimo ni supera el valor del lote. */
+function acotarAnticipo(valor: string, precioLote: number) {
+  return Math.min(Math.max(Number(valor) || 0, f.anticipoMinimo), precioLote);
+}
+
+/**
+ * Qué mostrar en el campo mientras el visitante tipea. Se corrige en el acto
+ * en cuanto el número tiene tantos dígitos como el mínimo: "5000" pasa a
+ * "6900" sin esperar a que salga del campo. Con menos dígitos se deja pasar,
+ * porque "7" o "70" son el principio de un valor válido y pisarlos haría
+ * imposible escribir cualquier cosa. Lo que falte se termina de acotar al
+ * salir del campo, y el plan se calcula siempre con el valor acotado.
+ */
+function anticipoTipeado(valor: string, precioLote: number) {
+  const completo = valor.replace(/\D/g, "").length >= String(f.anticipoMinimo).length;
+  return completo ? String(acotarAnticipo(valor, precioLote)) : valor;
+}
+
 /** Cotización de dolarapi.com. Si falla, queda el valor de respaldo del contenido. */
 function useCotizacion(): Cotizacion {
   const [cot, setCot] = useState<Cotizacion>({
@@ -67,13 +85,12 @@ export function Financiacion() {
   const cotizacion = useCotizacion();
 
   const plan = useMemo(() => {
-    const entrega = Math.min(Math.max(Number(anticipo) || 0, 0), lote.precio);
+    const entrega = acotarAnticipo(anticipo, lote.precio);
     const aFinanciar = lote.precio - entrega;
     return {
       entrega,
       aFinanciar,
       cuotaUsd: aFinanciar / plazo,
-      bajoMinimo: entrega < f.anticipoMinimo,
     };
   }, [anticipo, lote, plazo]);
 
@@ -146,18 +163,17 @@ export function Financiacion() {
                 <input
                   type="number"
                   inputMode="numeric"
-                  min={0}
+                  min={f.anticipoMinimo}
                   max={lote.precio}
                   step={100}
                   value={anticipo}
-                  onChange={(e) => setAnticipo(e.target.value)}
+                  onChange={(e) => setAnticipo(anticipoTipeado(e.target.value, lote.precio))}
+                  onBlur={(e) => setAnticipo(String(acotarAnticipo(e.target.value, lote.precio)))}
                   className="w-full bg-transparent py-3.5 text-lg font-bold outline-none"
                 />
               </div>
-              <p className={`mt-2 text-xs ${plan.bajoMinimo ? "text-naranja" : "text-crema/65"}`}>
-                {plan.bajoMinimo
-                  ? `El anticipo sugerido es de USD ${usd.format(f.anticipoMinimo)}. Con menos, consultá condiciones.`
-                  : `Anticipo mínimo sugerido: USD ${usd.format(f.anticipoMinimo)}.`}
+              <p className="mt-2 text-xs text-crema/65">
+                Anticipo mínimo: USD {usd.format(f.anticipoMinimo)}.
               </p>
             </Campo>
 
@@ -236,6 +252,9 @@ export function Financiacion() {
               href={consulta}
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="wsp-plan"
+              data-umami-event-lote={lote.m2}
+              data-umami-event-cuotas={plazo}
               className={`mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-bold ${superficieNaranja}`}
             >
               <IconoWhatsapp />

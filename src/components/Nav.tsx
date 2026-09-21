@@ -57,6 +57,7 @@ export function Nav() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
+            data-umami-event="wsp-header"
             className={`hidden items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold sm:inline-flex ${superficieNaranja}`}
           >
             <IconoWhatsapp />
@@ -102,6 +103,7 @@ export function Nav() {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
+            data-umami-event="wsp-header"
             className={`mt-6 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold ${superficieNaranja}`}
           >
             <IconoWhatsapp />

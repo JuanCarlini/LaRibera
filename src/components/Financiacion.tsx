@@ -252,6 +252,9 @@ export function Financiacion() {
               href={consulta}
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="wsp-plan"
+              data-umami-event-lote={lote.m2}
+              data-umami-event-cuotas={plazo}
               className={`mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-bold ${superficieNaranja}`}
             >
               <IconoWhatsapp />

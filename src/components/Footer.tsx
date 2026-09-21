@@ -27,12 +27,14 @@ export function Footer() {
               href={`https://wa.me/${proyecto.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="wsp-footer"
               className="block font-bold text-crema transition-colors hover:text-lima"
             >
               {proyecto.whatsappVisible}
             </a>
             <a
               href={`mailto:${proyecto.email}`}
+              data-umami-event="email-footer"
               className="block transition-colors hover:text-lima"
             >
               {proyecto.email}

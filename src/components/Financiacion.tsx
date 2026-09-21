@@ -20,13 +20,22 @@ const DIAS_DE_TOLERANCIA = 45;
 const [anio, mes, dia] = f.cotizacion.respaldoDesde.split("-");
 const FECHA_RESPALDO = `${dia}/${mes}/${anio}`;
 
-/**
- * El anticipo nunca baja del mínimo ni supera el valor del lote. Si el
- * visitante escribe menos (o deja el campo vacío mientras tipea), el plan se
- * calcula igual con el mínimo y al salir del campo el valor se corrige solo.
- */
+/** El anticipo nunca baja del mínimo ni supera el valor del lote. */
 function acotarAnticipo(valor: string, precioLote: number) {
   return Math.min(Math.max(Number(valor) || 0, f.anticipoMinimo), precioLote);
+}
+
+/**
+ * Qué mostrar en el campo mientras el visitante tipea. Se corrige en el acto
+ * en cuanto el número tiene tantos dígitos como el mínimo: "5000" pasa a
+ * "6900" sin esperar a que salga del campo. Con menos dígitos se deja pasar,
+ * porque "7" o "70" son el principio de un valor válido y pisarlos haría
+ * imposible escribir cualquier cosa. Lo que falte se termina de acotar al
+ * salir del campo, y el plan se calcula siempre con el valor acotado.
+ */
+function anticipoTipeado(valor: string, precioLote: number) {
+  const completo = valor.replace(/\D/g, "").length >= String(f.anticipoMinimo).length;
+  return completo ? String(acotarAnticipo(valor, precioLote)) : valor;
 }
 
 /** Cotización de dolarapi.com. Si falla, queda el valor de respaldo del contenido. */
@@ -158,7 +167,7 @@ export function Financiacion() {
                   max={lote.precio}
                   step={100}
                   value={anticipo}
-                  onChange={(e) => setAnticipo(e.target.value)}
+                  onChange={(e) => setAnticipo(anticipoTipeado(e.target.value, lote.precio))}
                   onBlur={(e) => setAnticipo(String(acotarAnticipo(e.target.value, lote.precio)))}
                   className="w-full bg-transparent py-3.5 text-lg font-bold outline-none"
                 />

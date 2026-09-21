@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
+import Script from "next/script";
 import { armarReveal } from "@/components/Reveal";
 import { proyecto, sitio, ubicacion } from "@/content/site";
 import "./globals.css";
@@ -64,6 +65,16 @@ const datosEstructurados = {
   },
 };
 
+// Umami self-hosted. Sólo en producción: en `next dev` no queremos ensuciar
+// las estadísticas con nuestras propias visitas. Sin las variables el script
+// directamente no se renderiza.
+const umami = {
+  src: process.env.NEXT_PUBLIC_UMAMI_SRC,
+  websiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
+};
+const conUmami =
+  process.env.NODE_ENV === "production" && umami.src && umami.websiteId;
+
 // El script de abajo le agrega `reveal-armado` al <html> antes de que React
 // hidrate, así que el className del servidor y el del cliente no coinciden a
 // propósito. `suppressHydrationWarning` silencia sólo los atributos de este
@@ -85,6 +96,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
         />
         {children}
+        {conUmami && (
+          <Script
+            src={umami.src}
+            data-website-id={umami.websiteId}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "./Logo";
 import { legales, nav, proyecto } from "@/content/site";
 
@@ -47,7 +48,10 @@ export function Footer() {
         <hr className="mt-16 border-crema/15" />
         <p className="mt-8 max-w-3xl text-xs leading-relaxed">{legales}</p>
         <p className="mt-4 text-xs">
-          © {new Date().getFullYear()} {proyecto.nombre}
+          © {new Date().getFullYear()} {proyecto.nombre} ·{" "}
+          <Link href="/privacidad" className="transition-colors hover:text-lima">
+            Política de privacidad
+          </Link>
         </p>
       </div>
     </footer>

@@ -247,3 +247,92 @@ export const contacto = {
 
 export const legales =
   "Las imágenes son ilustrativas y no constituyen oferta contractual. Superficies, servicios y plazos sujetos a aprobación de los organismos competentes.";
+
+/**
+ * Política de privacidad (/privacidad). La pide Meta para publicar la app de
+ * WhatsApp Business y cubre también el formulario y la analítica del sitio.
+ * `#eliminacion` es la URL de instrucciones de eliminación de datos que se
+ * carga en la configuración de la app de Meta.
+ */
+export const privacidad: {
+  actualizada: string;
+  secciones: { id: string; titulo: string; parrafos: string[]; items?: string[] }[];
+} = {
+  actualizada: "25 de septiembre de 2026",
+  secciones: [
+    {
+      id: "responsable",
+      titulo: "Quiénes somos",
+      parrafos: [
+        "La Ribera es un barrio residencial abierto en Villa Gobernador Gálvez, Santa Fe, desarrollado por la Asociación Mutual 18 de Julio y comercializado por Qala Desarrollos. Esta política explica qué datos personales recibimos cuando nos consultás a través de lariberavgg.com o de nuestro WhatsApp, para qué los usamos y cómo podés ejercer tus derechos.",
+      ],
+    },
+    {
+      id: "datos",
+      titulo: "Qué datos recibimos",
+      parrafos: ["Sólo tratamos los datos que vos mismo nos das al contactarnos:"],
+      items: [
+        "Tu nombre y tu número de teléfono, tal como figuran en tu cuenta de WhatsApp.",
+        "El contenido de los mensajes, audios, imágenes y archivos que nos envíes.",
+        "Los datos que cargues en el formulario de contacto del sitio.",
+        "Si llegaste desde un anuncio, los parámetros de campaña del enlace (por ejemplo, utm_source).",
+      ],
+    },
+    {
+      id: "uso",
+      titulo: "Para qué los usamos",
+      parrafos: [
+        "Usamos tus datos únicamente para responder tus consultas sobre los lotes, coordinar el contacto con un representante comercial y hacer el seguimiento de tu consulta. No los vendemos ni los usamos para fines ajenos al proyecto.",
+        "La primera respuesta por WhatsApp puede estar a cargo de un asistente automatizado que usa inteligencia artificial. En cualquier momento podés pedir hablar con una persona.",
+      ],
+    },
+    {
+      id: "terceros",
+      titulo: "Con quién los compartimos",
+      parrafos: [
+        "Compartimos tus datos con Qala Desarrollos, a cargo de la comercialización, para que un representante pueda contactarte. Además, para operar el servicio nos apoyamos en proveedores que procesan los datos por cuenta nuestra:",
+      ],
+      items: [
+        "Meta Platforms (WhatsApp Business), para enviar y recibir los mensajes.",
+        "OpenAI, para generar las respuestas del asistente y transcribir audios.",
+        "Google, para registrar las consultas en planillas internas.",
+      ],
+    },
+    {
+      id: "analitica",
+      titulo: "Analítica del sitio",
+      parrafos: [
+        "Medimos las visitas a lariberavgg.com con una herramienta propia que no usa cookies ni guarda datos que te identifiquen personalmente.",
+      ],
+    },
+    {
+      id: "conservacion",
+      titulo: "Cuánto tiempo los guardamos",
+      parrafos: [
+        "Conservamos tus datos mientras dure la relación comercial o hasta que nos pidas que los eliminemos, salvo que alguna norma nos obligue a guardarlos por más tiempo.",
+      ],
+    },
+    {
+      id: "derechos",
+      titulo: "Tus derechos",
+      parrafos: [
+        "Conforme a la Ley 25.326 de Protección de Datos Personales, podés pedir en cualquier momento acceder a tus datos, rectificarlos, actualizarlos o suprimirlos, escribiéndonos a lariberavgg@gmail.com. Respondemos dentro de los plazos que fija la ley.",
+        "La Agencia de Acceso a la Información Pública, en su carácter de órgano de control de la Ley 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.",
+      ],
+    },
+    {
+      id: "eliminacion",
+      titulo: "Cómo pedir la eliminación de tus datos",
+      parrafos: [
+        "Para que borremos tus datos, escribinos a lariberavgg@gmail.com con el asunto \"Eliminar mis datos\" e indicá el número de teléfono con el que nos contactaste. También podés pedirlo directamente por WhatsApp. Te confirmamos por el mismo medio cuando la eliminación esté hecha.",
+      ],
+    },
+    {
+      id: "cambios",
+      titulo: "Cambios en esta política",
+      parrafos: [
+        "Si modificamos esta política, publicamos la nueva versión en esta misma página con su fecha de actualización.",
+      ],
+    },
+  ],
+};

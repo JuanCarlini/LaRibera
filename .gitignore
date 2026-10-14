@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+# menos el intermedio público de CAMARCO, que el workflow del CAC necesita
+!tools/camarco-intermedio.pem
 
 # debug
 npm-debug.log*

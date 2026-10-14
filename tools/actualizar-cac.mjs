@@ -53,7 +53,12 @@ const fallar = (motivo) => {
 };
 
 const url = `${API}?search=${encodeURIComponent("Indicador CAMARCO")}&per_page=20&_fields=slug,date,title,content`;
-const resp = await fetch(url, { headers: { "user-agent": "la-ribera/actualizador-cac" } });
+// camarco.org.ar no manda el intermedio de su certificado, así que en Linux Node
+// corta la conexión con UNABLE_TO_VERIFY_LEAF_SIGNATURE. En CI se lo pasamos por
+// NODE_EXTRA_CA_CERTS (ver tools/camarco-intermedio.pem).
+const resp = await fetch(url, { headers: { "user-agent": "la-ribera/actualizador-cac" } }).catch((e) =>
+  fallar(`no pude llegar a la API (${e.cause?.code ?? e.cause?.message ?? e.message})`),
+);
 if (!resp.ok) fallar(`la API respondió ${resp.status}`);
 
 const notas = (await resp.json())

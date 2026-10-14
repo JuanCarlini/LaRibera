@@ -189,7 +189,7 @@ export const vida = {
 
 export const financiacion = {
   eyebrow: "Financiación",
-  titulo: ["El sueño de la casa propia", "ya no es una idea lejana."],
+  titulo: ["El sueño de construir", "tu propia casa empieza acá."],
   bajada:
     "Completá cuánto podés entregar y mirá cómo queda tu cuota.",
   cta: "Quiero asesoramiento",

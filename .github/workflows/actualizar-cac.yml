@@ -24,6 +24,11 @@ jobs:
           node-version: 24
 
       - name: Leer el último indicador publicado
+        # camarco.org.ar sirve su certificado sin el intermedio de Sectigo. Los
+        # navegadores completan la cadena solos; Node acá no, y el fetch falla con
+        # UNABLE_TO_VERIFY_LEAF_SIGNATURE. Le pasamos el intermedio nosotros.
+        env:
+          NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/tools/camarco-intermedio.pem
         run: node tools/actualizar-cac.mjs
 
       - name: Commitear si cambió

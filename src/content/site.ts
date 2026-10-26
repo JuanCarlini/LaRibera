@@ -205,7 +205,7 @@ export const financiacion = {
     { precio: 16400, m2: 220.44, disponibles: 3, detalle: "Lotes en esquina" },
   ],
 
-  anticipoMinimo: 6900,
+  anticipoMinimo: 3000,
   plazos: [6, 12, 18, 24],
   notaPlazo:
     "El plazo máximo de financiación es de 24 meses, el mismo tiempo que dura la obra del loteo.",

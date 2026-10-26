@@ -27,9 +27,9 @@ function acotarAnticipo(valor: string, precioLote: number) {
 
 /**
  * Qué mostrar en el campo mientras el visitante tipea. Se corrige en el acto
- * en cuanto el número tiene tantos dígitos como el mínimo: "5000" pasa a
- * "6900" sin esperar a que salga del campo. Con menos dígitos se deja pasar,
- * porque "7" o "70" son el principio de un valor válido y pisarlos haría
+ * en cuanto el número tiene tantos dígitos como el mínimo: "2000" pasa a
+ * "3000" sin esperar a que salga del campo. Con menos dígitos se deja pasar,
+ * porque "3" o "30" son el principio de un valor válido y pisarlos haría
  * imposible escribir cualquier cosa. Lo que falte se termina de acotar al
  * salir del campo, y el plan se calcula siempre con el valor acotado.
  */

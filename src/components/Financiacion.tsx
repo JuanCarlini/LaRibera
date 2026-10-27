@@ -172,9 +172,6 @@ export function Financiacion() {
                   className="w-full bg-transparent py-3.5 text-lg font-bold outline-none"
                 />
               </div>
-              <p className="mt-2 text-xs text-crema/65">
-                Anticipo mínimo: USD {usd.format(f.anticipoMinimo)}.
-              </p>
             </Campo>
 
             <Campo etiqueta="Plazo">

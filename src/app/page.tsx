@@ -10,6 +10,7 @@ import { Actores } from "@/components/Actores";
 import { Contacto } from "@/components/Contacto";
 import { Footer } from "@/components/Footer";
 import { RevealProvider } from "@/components/Reveal";
+import { Analitica } from "@/components/Analitica";
 
 export default function Home() {
   return (
@@ -28,6 +29,7 @@ export default function Home() {
       </main>
       <Footer />
       <RevealProvider />
+      <Analitica />
     </>
   );
 }

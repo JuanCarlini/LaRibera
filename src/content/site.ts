@@ -258,7 +258,7 @@ export const privacidad: {
   actualizada: string;
   secciones: { id: string; titulo: string; parrafos: string[]; items?: string[] }[];
 } = {
-  actualizada: "25 de septiembre de 2026",
+  actualizada: "2 de noviembre de 2026",
   secciones: [
     {
       id: "responsable",
@@ -303,6 +303,8 @@ export const privacidad: {
       titulo: "Analítica del sitio",
       parrafos: [
         "Medimos las visitas a lariberavgg.com con una herramienta propia que no usa cookies ni guarda datos que te identifiquen personalmente.",
+        // TODO: confirmar este párrafo con el cliente antes de publicarlo.
+        "Para entender qué partes de la página resultan útiles registramos, de forma anónima, qué secciones se ven, hasta dónde se baja y qué botones se tocan. En una porción de las visitas también guardamos una reproducción del recorrido por la página, con todos los textos y campos ocultos: no se graba lo que escribís ni el contenido del formulario.",
       ],
     },
     {

@@ -75,6 +75,9 @@ export function Contacto() {
         <form
           onSubmit={enviar}
           className="space-y-11"
+          // Marca para el Block Selector de los replays de Umami: el
+          // formulario pide nombre, teléfono y mail, así que no se graba.
+          data-sin-grabar
           data-reveal
           style={{ "--reveal-delay": "140ms" } as React.CSSProperties}
         >

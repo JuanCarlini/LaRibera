@@ -71,6 +71,10 @@ const datosEstructurados = {
 const umami = {
   src: process.env.NEXT_PUBLIC_UMAMI_SRC,
   websiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
+  // El grabador se sirve desde el mismo host que el tracker. Se deriva en vez
+  // de pedir otra variable: si algún día se renombra el script con
+  // TRACKER_SCRIPT_NAME en el servidor, hay que ajustar esta línea.
+  recorder: process.env.NEXT_PUBLIC_UMAMI_SRC?.replace("script.js", "recorder.js"),
 };
 const conUmami =
   process.env.NODE_ENV === "production" && umami.src && umami.websiteId;
@@ -97,11 +101,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         {children}
         {conUmami && (
-          <Script
-            src={umami.src}
-            data-website-id={umami.websiteId}
-            strategy="afterInteractive"
-          />
+          <>
+            <Script
+              src={umami.src}
+              data-website-id={umami.websiteId}
+              data-performance="true"
+              strategy="afterInteractive"
+            />
+            {/* Grabador de Umami v3: habilita replays y mapas de calor. Es un
+                script aparte del tracker y comparte el mismo website id. Las
+                opciones (muestreo, enmascarado, duración) se configuran en el
+                panel, no acá; el formulario de contacto lleva
+                `data-sin-grabar` para excluirlo con el Block Selector. */}
+            <Script
+              src={umami.recorder}
+              data-website-id={umami.websiteId}
+              strategy="afterInteractive"
+            />
+          </>
         )}
       </body>
     </html>

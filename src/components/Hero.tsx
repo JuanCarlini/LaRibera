@@ -79,7 +79,9 @@ export function Hero() {
         </div>
       </div>
 
-      <Wave className="absolute inset-x-0 bottom-0 text-crema" />
+      {/* La onda se pinta del color de la sección que sigue, para que la
+          costura desaparezca: hoy es Financiación, en verde. */}
+      <Wave className="absolute inset-x-0 bottom-0 text-verde" />
     </section>
   );
 }

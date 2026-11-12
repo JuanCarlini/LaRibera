@@ -12,8 +12,8 @@ import { useEffect } from "react";
  *     o sea qué leyó.
  *   · `scroll-25` / `-50` / `-75` / `-100`, o sea hasta dónde llegó.
  *
- * Con los `seccion-*` se arma el embudo en Umami (hero → proyecto →
- * financiación → contacto) y ahí se ve en qué escalón se cae la gente.
+ * Con los `seccion-*` se arma el embudo en Umami (hero → financiación →
+ * proyecto → contacto) y ahí se ve en qué escalón se cae la gente.
  *
  * Si un adblocker bloquea el script, `window.umami` no existe: los observers
  * siguen corriendo pero no reportan nada. Nunca se asume que está.

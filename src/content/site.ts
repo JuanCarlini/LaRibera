@@ -20,8 +20,8 @@ export const mensajeWhatsapp =
   "Hola, quiero información sobre los lotes de La Ribera.";
 
 export const nav = [
-  { href: "#proyecto", label: "El proyecto" },
   { href: "#financiacion", label: "Financiación" },
+  { href: "#proyecto", label: "El proyecto" },
   { href: "#servicios", label: "Servicios" },
   { href: "#ubicacion", label: "Ubicación" },
   { href: "#vida", label: "La vida acá" },

@@ -18,9 +18,9 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Proyecto />
-        <Ticker />
         <Financiacion />
+        <Ticker />
+        <Proyecto />
         <Servicios />
         <Ubicacion />
         <Vida />

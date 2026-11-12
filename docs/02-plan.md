@@ -41,9 +41,9 @@ la calidez de las piezas de La Ribera.
 | # | Sección | Estado |
 |---|---|---|
 | — | Hero: aérea + "Acá empieza tu futuro" + 2 CTA | ✅ maqueta |
+| 01 | Financiación: calculadora de plan de pago | ✅ con precios reales, ⚠️ falta CAC |
 | — | Cinta de datos duros (marquee) | ✅ maqueta |
-| 01 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
-| 02 | Financiación: calculadora de plan de pago | ✅ con precios reales, ⚠️ falta CAC |
+| 02 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
 | 03 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
 | 04 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
 | 05 | La vida acá: cards apiladas con sticky | ✅ con renders reales |

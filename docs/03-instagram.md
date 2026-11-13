@@ -29,39 +29,59 @@ en Instagram. Para el objetivo de llevar gente a la cuenta, juega a favor.
 ## Requisitos
 
 1. **Cuenta profesional** (Business o Creator). Con una cuenta personal la API
-   no devuelve nada. Se convierte gratis desde la app, en Configuración.
-2. Una app en [developers.facebook.com](https://developers.facebook.com) con el
-   producto **Instagram** agregado. Ya existe una app de Meta para WhatsApp
-   Business: conviene una aparte, para no mezclar permisos.
+   no devuelve nada. Se convierte gratis desde la app de Instagram, en
+   Configuración.
+2. Una app de tipo **Business** en
+   [developers.facebook.com](https://developers.facebook.com), con el producto
+   **Instagram** agregado. Ya existe una app de Meta para WhatsApp Business:
+   conviene una aparte, para no mezclar permisos.
 
-No hace falta App Review: mientras la app sirva sólo a la cuenta propia alcanza
-con **Standard Access**.
+Lo que **no** hace falta: ni página de Facebook, ni business portfolio, ni App
+Review. Mientras la app sirva sólo a la cuenta propia alcanza con **Standard
+Access**. Tampoco hay que implementar el login de Instagram ni configurar
+redirect URIs: eso es para apps que leen cuentas de terceros.
 
 ## Obtener el token
 
-En el panel de la app, **Instagram → API setup with Instagram login**:
+En el panel de la app, menú izquierdo, **Instagram → API setup with Instagram
+business login** (en algunas pantallas el menú lo llama *API setup with
+Instagram login*; es el mismo lugar):
 
-1. En *Generate access tokens*, agregar la cuenta de Instagram y darle acceso.
-2. Generar el token. Es de larga duración: **60 días**.
-3. Cargarlo en Vercel como `INSTAGRAM_TOKEN` (Settings → Environment Variables),
+1. **Generate token**, al lado de la cuenta que se quiere leer.
+2. Iniciar sesión en Instagram con esa cuenta.
+3. Copiar el token. El del panel ya es de larga duración —**60 días**—, no hay
+   que canjearlo por otro.
+
+Antes de tocar Vercel, comprobarlo:
+
+```bash
+node tools/instagram.mjs probar <token>
+```
+
+Dice de qué cuenta es, si es profesional y qué publicaciones va a mostrar la
+grilla. Si algo falla, explica el motivo que devuelve Meta.
+
+Después:
+
+4. Cargarlo en Vercel como `INSTAGRAM_TOKEN` (Settings → Environment Variables),
    en Production y Preview. Es un secreto: no va al repo.
-4. Redeployar. La sección aparece sola; sin la variable, no se dibuja.
+5. Redeployar. La sección aparece sola; sin la variable, no se dibuja.
 
-Para probar en local, el mismo valor en `.env.local`.
+Para trabajar en local, el mismo valor en `.env.local`.
 
 ## Mantener el token vivo
 
 Es el único punto frágil de todo esto. A los 60 días el token vence, y **un
 token vencido no se recupera**: hay que volver a generarlo a mano.
 
-Refrescarlo (sirve a partir de las 24 h de emitido y antes de que venza):
+Renovarlo (sirve a partir de las 24 h de emitido y antes de que venza):
 
-```
-GET https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=<TOKEN_ACTUAL>
+```bash
+node tools/instagram.mjs renovar
 ```
 
 Devuelve un token nuevo, válido por otros 60 días, que hay que volver a cargar
-en Vercel.
+en Vercel y redeployar.
 
 Por ahora el procedimiento es manual: **poner un recordatorio cada 50 días**.
 Para un sitio de este tamaño es más barato que automatizarlo, pero si se vuelve

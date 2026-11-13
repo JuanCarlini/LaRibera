@@ -28,9 +28,9 @@ en Instagram. Para el objetivo de llevar gente a la cuenta, juega a favor.
 
 ## Requisitos
 
-1. **Cuenta profesional** (Business o Creator). Con una cuenta personal la API
-   no devuelve nada. Se convierte gratis desde la app de Instagram, en
-   Configuración.
+1. **Cuenta profesional** (Business o Creator) y **pública**. Con una cuenta
+   personal la API no devuelve nada, y una privada no se puede agregar a la
+   app. Se convierte gratis desde la app de Instagram, en Configuración.
 2. Una app de tipo **Business** en
    [developers.facebook.com](https://developers.facebook.com), con el producto
    **Instagram** agregado. Ya existe una app de Meta para WhatsApp Business:
@@ -40,6 +40,27 @@ Lo que **no** hace falta: ni página de Facebook, ni business portfolio, ni App
 Review. Mientras la app sirva sólo a la cuenta propia alcanza con **Standard
 Access**. Tampoco hay que implementar el login de Instagram ni configurar
 redirect URIs: eso es para apps que leen cuentas de terceros.
+
+## Crear la app
+
+El asistente de [developers.facebook.com/apps](https://developers.facebook.com/apps)
+pregunta, en este orden:
+
+1. **Connect a business** — opcional por ahora. Sólo hace falta para publicar
+   la app, y se conecta después desde *App settings → Basic*.
+2. **Select your use case** — **Other**. Es el único que habilita el producto
+   Instagram; los demás arman apps de mensajería.
+3. **Select your app type** — **Business**. Obligatorio: con otro tipo el
+   producto Instagram no se puede agregar.
+4. **Add app details** — nombre y mail de contacto.
+
+Ya en el panel, bajar hasta el producto **Instagram** y clickear **Set up**.
+Eso agrega *API setup with Instagram login* solo.
+
+A partir de ahí el asistente ofrece tres pasos que **no corresponden a este
+caso** y conviene saltear: *Configure webhooks* (son para mensajería),
+*Set up Instagram business login* (redirect URLs, para apps que leen cuentas
+de terceros) y *Complete App Review* (no se necesita para la cuenta propia).
 
 ## Obtener el token
 

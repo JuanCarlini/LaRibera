@@ -1,25 +1,21 @@
 /**
- * Comprueba y renueva el token de la API de Instagram.
+ * Comprueba el token de la API de Instagram antes de cargarlo en Vercel.
  *
- * Son las dos únicas tareas manuales que tiene la sección de obra: verificar
- * que un token recién generado sirve, y renovarlo antes de que venza a los 60
- * días. Un token vencido no se recupera: hay que generar otro a mano desde el
- * panel de Meta.
+ * Dice de qué cuenta es, si es profesional y qué publicaciones va a mostrar la
+ * grilla. Con el inicio de sesión unificado el token es de usuario del sistema
+ * y no caduca, así que no hay nada que renovar: esto se usa una vez al
+ * configurar, y después sólo si algo deja de verse.
  *
- *   node tools/instagram.mjs probar      # ¿sirve? ¿qué devuelve?
- *   node tools/instagram.mjs renovar     # otros 60 días
+ *   node tools/instagram.mjs
+ *   node tools/instagram.mjs <token> <id-de-cuenta>
  *
- * Toma el token del argumento, de INSTAGRAM_TOKEN en el entorno o de
- * .env.local, en ese orden:
- *
- *   node tools/instagram.mjs probar EAAG...
- *
- * No escribe nada: el token nuevo se copia a mano a Vercel y a .env.local.
- * Ver docs/03-instagram.md.
+ * Sin argumentos toma INSTAGRAM_TOKEN e INSTAGRAM_ACCOUNT_ID del entorno o de
+ * .env.local. No escribe nada. Ver docs/03-instagram.md.
  */
 import { readFileSync } from "node:fs";
 
-/** Los mismos campos que pide src/lib/instagram.ts. */
+/** Los mismos host, versión y campos que src/lib/instagram.ts. */
+const HOST = "https://graph.facebook.com/v27.0";
 const CAMPOS = "id,caption,media_type,media_url,permalink,thumbnail_url,timestamp";
 
 const fallar = (motivo) => {
@@ -27,15 +23,15 @@ const fallar = (motivo) => {
   process.exit(1);
 };
 
-/** El token, de donde aparezca primero. */
-function leerToken() {
-  const delArgumento = process.argv[3];
+/** Lee una variable del argumento, del entorno o de .env.local, en ese orden. */
+function leer(nombre, posicion) {
+  const delArgumento = process.argv[posicion];
   if (delArgumento) return delArgumento;
-  if (process.env.INSTAGRAM_TOKEN) return process.env.INSTAGRAM_TOKEN;
+  if (process.env[nombre]) return process.env[nombre];
 
   try {
     const env = readFileSync(".env.local", "utf8");
-    const linea = env.match(/^INSTAGRAM_TOKEN=(.+)$/m);
+    const linea = env.match(new RegExp(`^${nombre}=(.+)$`, "m"));
     if (linea?.[1].trim()) return linea[1].trim();
   } catch {
     // Sin .env.local no pasa nada: cae en el mensaje de abajo.
@@ -57,72 +53,44 @@ async function pedir(url) {
   return cuerpo;
 }
 
-async function probar(token) {
-  const cuenta = await pedir(
-    `https://graph.instagram.com/me?fields=user_id,username,account_type&access_token=${token}`,
-  );
+const token = leer("INSTAGRAM_TOKEN", 2);
+const cuenta = leer("INSTAGRAM_ACCOUNT_ID", 3);
 
-  // /me devuelve el objeto suelto o dentro de data según la versión.
-  const datos = Array.isArray(cuenta?.data) ? cuenta.data[0] : cuenta;
-  console.log(`\n  Cuenta:  @${datos?.username ?? "?"}`);
-  console.log(`  Tipo:    ${datos?.account_type ?? "?"}`);
-
-  if (datos?.account_type && !/business|creator/i.test(datos.account_type)) {
-    console.log("\n  ⚠ La API sólo devuelve media de cuentas profesionales.");
-  }
-
-  const feed = await pedir(
-    `https://graph.instagram.com/me/media?fields=${CAMPOS}&limit=8&access_token=${token}`,
-  );
-  const medias = feed?.data ?? [];
-
-  console.log(`\n  Últimas ${medias.length} publicaciones:\n`);
-
-  for (const m of medias) {
-    const esVideo = m.media_type === "VIDEO";
-    const portada = esVideo ? (m.thumbnail_url ?? m.media_url) : (m.media_url ?? m.thumbnail_url);
-    const fecha = m.timestamp ? m.timestamp.slice(0, 10) : "?";
-    const marca = portada ? (esVideo ? "▶" : "■") : "✖";
-
-    console.log(`    ${marca} ${fecha}  ${m.media_type ?? "?"}`);
-    if (!portada) {
-      console.log("        sin imagen de portada: esta pieza se descarta");
-    }
-  }
-
-  const sinPortada = medias.filter(
-    (m) => !(m.media_type === "VIDEO" ? (m.thumbnail_url ?? m.media_url) : (m.media_url ?? m.thumbnail_url)),
-  ).length;
-
-  console.log(
-    `\n  ✔ El token sirve. La grilla va a mostrar ${medias.length - sinPortada} de ${medias.length}.\n`,
-  );
-}
-
-async function renovar(token) {
-  const nuevo = await pedir(
-    `https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`,
-  );
-
-  const dias = Math.round((nuevo.expires_in ?? 0) / 86400);
-  const vence = new Date(Date.now() + (nuevo.expires_in ?? 0) * 1000);
-
-  console.log(`\n  Token nuevo, vence en ${dias} días (${vence.toLocaleDateString("es-AR")}):\n`);
-  console.log(`    ${nuevo.access_token}\n`);
-  console.log("  Copialo en Vercel (Settings → Environment Variables → INSTAGRAM_TOKEN)");
-  console.log("  y redeployá. Si lo usás en local, también en .env.local.\n");
-}
-
-const accion = process.argv[2];
-if (!["probar", "renovar"].includes(accion)) {
-  fallar("Uso: node tools/instagram.mjs probar|renovar [token]");
-}
-
-const token = leerToken();
-if (!token) {
+if (!token || !cuenta) {
   fallar(
-    "No hay token. Pasalo como argumento, exportá INSTAGRAM_TOKEN\n    o ponelo en .env.local. Cómo generarlo: docs/03-instagram.md",
+    "Faltan el token o el id de la cuenta. Pasalos como argumentos,\n    exportalos o ponelos en .env.local. Cómo obtenerlos: docs/03-instagram.md",
   );
 }
 
-await (accion === "probar" ? probar(token) : renovar(token));
+const perfil = await pedir(
+  `${HOST}/${cuenta}?fields=username,name&access_token=${token}`,
+);
+
+console.log(`\n  Cuenta:  @${perfil?.username ?? "?"}`);
+if (perfil?.name) console.log(`  Nombre:  ${perfil.name}`);
+
+const feed = await pedir(
+  `${HOST}/${cuenta}/media?fields=${CAMPOS}&limit=8&access_token=${token}`,
+);
+const medias = feed?.data ?? [];
+
+const portadaDe = (m) =>
+  m.media_type === "VIDEO"
+    ? (m.thumbnail_url ?? m.media_url)
+    : (m.media_url ?? m.thumbnail_url);
+
+console.log(`\n  Últimas ${medias.length} publicaciones:\n`);
+
+for (const m of medias) {
+  const portada = portadaDe(m);
+  const fecha = m.timestamp ? m.timestamp.slice(0, 10) : "?";
+  const marca = portada ? (m.media_type === "VIDEO" ? "▶" : "■") : "✖";
+
+  console.log(`    ${marca} ${fecha}  ${m.media_type ?? "?"}`);
+  if (!portada) console.log("        sin imagen de portada: esta pieza se descarta");
+}
+
+const sinPortada = medias.filter((m) => !portadaDe(m)).length;
+console.log(
+  `\n  ✔ El token sirve. La grilla va a mostrar ${medias.length - sinPortada} de ${medias.length}.\n`,
+);

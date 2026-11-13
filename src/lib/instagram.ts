@@ -6,26 +6,36 @@
  * cookies de terceros al renderizar. La política de privacidad promete que el
  * sitio no usa cookies, así que esa vía está descartada.
  *
- * Setup: Instagram API with Instagram Login sobre una cuenta profesional
- * (Business o Creator; con una cuenta personal la API no devuelve nada).
- * Mientras la app sirva sólo a la cuenta propia alcanza con Standard Access y
- * no hace falta App Review. Ver docs/03-instagram.md.
+ * Setup: Instagram API con inicio de sesión unificado (Unified Login) sobre
+ * una cuenta profesional. Es lo único disponible en las apps creadas desde
+ * 2026: la variante con inicio de sesión de Instagram —`graph.instagram.com`
+ * y `/me/media`— ya no se puede configurar. El token es de usuario del sistema
+ * y no caduca. Ver docs/03-instagram.md.
  *
- * El token dura 60 días y hay que refrescarlo antes de que venza. Si falta,
- * vence o la API falla, estas funciones devuelven una lista vacía y la sección
- * no se dibuja: la página nunca se cae por esto.
+ * Si falta el token o el id de la cuenta, o la API falla, estas funciones
+ * devuelven una lista vacía y la sección no se dibuja: la página nunca se cae
+ * por esto.
  */
 
 /**
- * Sin número de versión a propósito: Meta sirve la vigente y así la llamada no
- * se rompe cuando la que hubiéramos fijado queda fuera de soporte.
+ * Unified Login va por el host de la Graph API, con el id de la cuenta en la
+ * ruta. La versión va fija porque sin ella Meta sirve la más vieja que siga
+ * viva; conviene revisarla cuando quede fuera de soporte (unos dos años).
  */
-const ENDPOINT = "https://graph.instagram.com/me/media";
+const HOST = "https://graph.facebook.com/v27.0";
 
 const CAMPOS = "id,caption,media_type,media_url,permalink,thumbnail_url,timestamp";
 
-/** Cada cuánto se vuelve a preguntar por el feed, en segundos. */
-const REVALIDAR = 3600;
+/**
+ * Cada cuánto se vuelve a preguntar por el feed, en segundos.
+ *
+ * Seis horas y no una: cada relectura devuelve URLs nuevas del CDN de Meta
+ * —vienen firmadas— y para `next/image` cada URL es una imagen distinta que
+ * hay que volver a optimizar. A una hora serían ~5.800 optimizaciones al mes,
+ * por encima de las 5.000 que incluye el plan Hobby de Vercel. A seis horas
+ * son menos de 1.000, y una obra no publica más seguido que eso.
+ */
+const REVALIDAR = 21600;
 
 /** Una publicación ya normalizada, lista para la grilla. */
 export type Publicacion = {
@@ -79,14 +89,15 @@ function altDe(caption: string | undefined, respaldo: string) {
 
 /**
  * Las últimas `cantidad` publicaciones. Devuelve `[]` ante cualquier problema
- * —falta el token, venció, la API responde mal— y nunca lanza: la sección que
+ * —falta el token o el id, la API responde mal— y nunca lanza: la sección que
  * la consume decide no dibujarse y el resto de la página sigue igual.
  */
 export async function ultimasPublicaciones(cantidad = 8): Promise<Publicacion[]> {
   const token = process.env.INSTAGRAM_TOKEN;
-  if (!token) return [];
+  const cuenta = process.env.INSTAGRAM_ACCOUNT_ID;
+  if (!token || !cuenta) return [];
 
-  const url = new URL(ENDPOINT);
+  const url = new URL(`${HOST}/${cuenta}/media`);
   url.searchParams.set("fields", CAMPOS);
   url.searchParams.set("limit", String(cantidad));
   url.searchParams.set("access_token", token);
@@ -95,7 +106,7 @@ export async function ultimasPublicaciones(cantidad = 8): Promise<Publicacion[]>
     const respuesta = await fetch(url, { next: { revalidate: REVALIDAR } });
 
     if (!respuesta.ok) {
-      // El cuerpo del error trae el motivo (token vencido, permiso que falta).
+      // El cuerpo del error trae el motivo (token revocado, permiso que falta).
       // Va a los logs del servidor; el visitante sólo ve la página sin sección.
       console.error(
         `Instagram respondió ${respuesta.status}:`,

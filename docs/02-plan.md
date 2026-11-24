@@ -46,7 +46,7 @@ la calidez de las piezas de La Ribera.
 | 02 | El proyecto: relato + contadores (269 / 211–240 m² / 4 servicios) | ✅ maqueta |
 | 03 | Servicios: aérea cortada por la onda + 4 servicios de red | ✅ maqueta |
 | 04 | Ubicación: Google Maps interactivo + accesos | ✅ mapa listo, ⚠️ faltan distancias |
-| — | Obra en marcha: últimas publicaciones de Instagram | ✅ código listo, ⚠️ falta el token (docs/03-instagram.md) |
+| — | Obra en marcha: últimas publicaciones de Instagram | ⛔ intentada y revertida, ver docs/03-instagram.md |
 | 05 | La vida acá: cards apiladas con sticky | ✅ con renders reales |
 | — | Quiénes lo hacen: desarrolladora y comercializadora | ✅ con logos |
 | 06 | Contacto: formulario + WhatsApp | ⚠️ falta destino de los leads |

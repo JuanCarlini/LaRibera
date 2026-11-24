@@ -1,8 +1,19 @@
 # Sección de obra desde Instagram
 
-La sección **Obra en marcha** muestra las últimas publicaciones de la cuenta y
-lleva tráfico al perfil. Va entre Ubicación y La vida acá: cierra el "dónde
-queda" con cómo está el loteo hoy, justo antes de los renders.
+> **Estado: no implementada.** Se intentó en noviembre de 2026 y se revirtió:
+> con la sección puesta la página se clavaba, y el código quedó fuera. Esto es
+> lo que se aprendió, para no volver a investigarlo de cero. Lo revertido está
+> en la historia de git, entre `75d5d7f` y `e407c9b` de la rama `dev`.
+>
+> Lo que **sí** quedó resuelto y sirve tal cual: la app de Meta está creada y
+> configurada, el token existe y funciona, y `tools/instagram.mjs` lo
+> comprueba. Lo que falta entender está en "Lo que quedó sin resolver", al
+> final.
+
+La idea: una sección **Obra en marcha** con las últimas publicaciones de la
+cuenta, que además lleve tráfico al perfil. El lugar pensado era entre
+Ubicación y La vida acá, para cerrar el "dónde queda" con cómo está el loteo
+hoy, justo antes de los renders.
 
 ## Por qué no usamos el embed oficial
 
@@ -190,3 +201,47 @@ En orden, lo que conviene mirar:
 4. Los logs del build en Vercel: si la API falló, `ultimasPublicaciones()` deja
    ahí el motivo que devolvió Meta. Si no hay ningún error, el problema es que
    el token no llegó.
+
+## Lo que quedó sin resolver
+
+Esto es lo que hay que entender **antes** de volver a intentarlo.
+
+**La página se clava con la sección puesta.** Chrome llega a mostrar "La
+página no responde". Pasa en el deploy y también en local, con el build de
+producción. Producción sin la sección no se clava. No se identificó la causa.
+Lo que se descartó con pruebas, para no repetirlo:
+
+- No son las imágenes: se clavaba igual con los `src` anulados a mano.
+- No es la cantidad: igual con dos piezas que con ocho.
+- No es la grilla: igual dejando sólo el encabezado.
+- No es JavaScript de la página: un `PerformanceObserver` de `longtask` no
+  registró una sola tarea larga.
+- No es el grabador de Umami: producción lo carga y dev no, al revés de lo que
+  haría falta para culparlo.
+- No es el reorden de secciones ni la onda del hero: producción los tiene.
+
+**Cuidado con cómo se mide.** Un `window.scrollTo` de varios miles de píxeles
+cuelga la pestaña por sí solo, con sección o sin ella, y eso mandó la
+investigación por el camino equivocado un buen rato. Hay que probar con la
+rueda, a mano. Las métricas de DevTools en vivo (INP, CLS) y la consola del
+navegador dijeron la verdad mucho antes que cualquier herramienta automática.
+
+**El reveal tiene una carrera latente, y sigue ahí.** `RevealProvider` cancela
+su temporizador de respaldo y después busca los `[data-reveal]`. Si el árbol
+no está completo —y no lo está en cuanto una sección espera datos del
+servidor— observa de menos o nada, y lo que llega tarde queda en `opacity: 0`
+para siempre: página en blanco, sin ningún error. Se intentó arreglarlo de dos
+formas y después reemplazarlo por `animation-timeline: view()`; todo eso se
+revirtió junto con la sección, así que **el bug sigue presente**. No lo
+dispara nada de lo que hay hoy en la página, pero lo va a disparar cualquier
+componente async que se agregue.
+
+**Las imágenes del CDN nunca llegaron a verse.** En la última prueba las
+piezas se dibujaban vacías. Puede ser consecuencia del cuelgue y no una causa
+aparte, pero no se comprobó.
+
+Una pista para la próxima: `<Instagram />` era un Server Component async sin
+`<Suspense>` alrededor. Eso parte el renderizado en dos tiempos y es
+exactamente lo que destapa la carrera del reveal. Vale la pena empezar por
+ahí, y probar la sección aislada en una página vacía antes de meterla en la
+portada.

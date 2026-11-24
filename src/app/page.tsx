@@ -5,11 +5,11 @@ import { Ticker } from "@/components/Ticker";
 import { Servicios } from "@/components/Servicios";
 import { Ubicacion } from "@/components/Ubicacion";
 import { Vida } from "@/components/Vida";
-import { Instagram } from "@/components/Instagram";
 import { Financiacion } from "@/components/Financiacion";
 import { Actores } from "@/components/Actores";
 import { Contacto } from "@/components/Contacto";
 import { Footer } from "@/components/Footer";
+import { RevealProvider } from "@/components/Reveal";
 import { Analitica } from "@/components/Analitica";
 
 export default function Home() {
@@ -23,12 +23,12 @@ export default function Home() {
         <Proyecto />
         <Servicios />
         <Ubicacion />
-        <Instagram />
         <Vida />
         <Actores />
         <Contacto />
       </main>
       <Footer />
+      <RevealProvider />
       <Analitica />
     </>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import Script from "next/script";
+import { armarReveal } from "@/components/Reveal";
 import { proyecto, sitio, ubicacion } from "@/content/site";
 import "./globals.css";
 
@@ -78,10 +79,22 @@ const umami = {
 const conUmami =
   process.env.NODE_ENV === "production" && umami.src && umami.websiteId;
 
+// El script de abajo le agrega `reveal-armado` al <html> antes de que React
+// hidrate, así que el className del servidor y el del cliente no coinciden a
+// propósito. `suppressHydrationWarning` silencia sólo los atributos de este
+// elemento, no los de sus hijos.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-AR" className={`${figtree.variable} h-full antialiased`}>
+    <html
+      lang="es-AR"
+      className={`${figtree.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <body className="min-h-full">
+        {/* Primero de todo: corre mientras el navegador todavía está parseando
+            el documento, así ningún [data-reveal] alcanza a pintarse sin la
+            clase y no hay parpadeo. */}
+        <script dangerouslySetInnerHTML={{ __html: armarReveal }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}

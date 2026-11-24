@@ -125,7 +125,7 @@ export const instagram = {
   bajada:
     "Lo que publicamos en Instagram: el loteo como está hoy, sin renders de por medio.",
   cta: "Seguinos en Instagram",
-  usuario: "lariberavgg",
+  usuario: "laribera.vgg",
   get perfil() {
     return `https://www.instagram.com/${this.usuario}/`;
   },

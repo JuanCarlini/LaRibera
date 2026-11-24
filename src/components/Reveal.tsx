@@ -34,32 +34,56 @@ window.__revealSeguro=setTimeout(function(){r.classList.remove("reveal-armado")}
  */
 export function RevealProvider() {
   useEffect(() => {
-    // Llegamos a hidratar: el respaldo ya no hace falta.
-    clearTimeout(window.__revealSeguro);
+    let io: IntersectionObserver | null = null;
 
-    const nodes = document.querySelectorAll<HTMLElement>("[data-reveal]");
-    if (!nodes.length) return;
+    const armar = () => {
+      const nodes = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if (!nodes.length) return false;
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add("is-visible");
-          io.unobserve(entry.target);
-        }
-      },
-      // El margen inferior negativo retrasa la entrada hasta que el bloque
-      // está bien dentro de la pantalla. El superior, enorme, hace que todo lo
-      // que quedó por encima cuente como visible: si no, al llegar por un
-      // ancla (#servicios), al recargar con el scroll restaurado o al volver
-      // con el botón atrás, el bloque se saltea y no vuelve a entrar nunca.
-      // El scroll a un ancla es animado, así que arranca en cero y el primer
-      // callback llega cuando el hero ya pasó de largo.
-      { rootMargin: "9999px 0px -12% 0px", threshold: 0.1 },
-    );
+      // El respaldo se cancela recién acá, con los nodos ya en la mano.
+      // Cancelarlo antes dejaba la página en blanco para siempre cuando este
+      // efecto corría primero: la clase quedaba puesta, nadie marcaba nada y
+      // el temporizador que lo arreglaba ya no existía. Pasa en cuanto algo
+      // del árbol llega después —una sección que espera datos del servidor—,
+      // y el síntoma es toda la página invisible, sin un solo error.
+      clearTimeout(window.__revealSeguro);
 
-    nodes.forEach((n) => io.observe(n));
-    return () => io.disconnect();
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("is-visible");
+            io?.unobserve(entry.target);
+          }
+        },
+        // El margen inferior negativo retrasa la entrada hasta que el bloque
+        // está bien dentro de la pantalla. El superior, enorme, hace que todo lo
+        // que quedó por encima cuente como visible: si no, al llegar por un
+        // ancla (#servicios), al recargar con el scroll restaurado o al volver
+        // con el botón atrás, el bloque se saltea y no vuelve a entrar nunca.
+        // El scroll a un ancla es animado, así que arranca en cero y el primer
+        // callback llega cuando el hero ya pasó de largo.
+        { rootMargin: "9999px 0px -12% 0px", threshold: 0.1 },
+      );
+
+      nodes.forEach((n) => io!.observe(n));
+      return true;
+    };
+
+    if (armar()) return () => io?.disconnect();
+
+    // Todavía no hay nada que animar. Esperamos a que el resto del árbol
+    // aparezca en lugar de rendirnos: mientras tanto el respaldo sigue vivo,
+    // así que el peor caso es una página sin animación, nunca una en blanco.
+    const mo = new MutationObserver(() => {
+      if (armar()) mo.disconnect();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mo.disconnect();
+      io?.disconnect();
+    };
   }, []);
 
   return null;

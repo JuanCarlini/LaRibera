@@ -148,8 +148,25 @@ Lo único que consume cuota es la optimización de imágenes de Vercel, y por es
 la revalidación es cada seis horas en lugar de cada hora. Si el sitio está en
 plan Hobby conviene no bajar ese número sin rehacer la cuenta de arriba.
 
-## Pendiente
+## Verificado contra la API real
 
-- Probar contra la API de verdad. El layout se verificó con datos de muestra; la
-  forma de la respuesta y el paso de las imágenes del CDN por `next/image` no se
-  pudieron probar sin un token.
+Con el token cargado, `node tools/instagram.mjs` devuelve la cuenta
+`@laribera.vgg` y sus ocho últimas publicaciones —cuatro videos, dos carruseles
+y dos fotos—, las ocho con portada. Los videos llegan sin `media_url`, como
+estaba previsto, y resuelven por `thumbnail_url`.
+
+La página servida trae la sección con las ocho piezas, cada una enlazada a su
+post, y las imágenes salen por `/_next/image` desde `scontent.cdninstagram.com`:
+una petición de prueba devolvió 200 y un JPEG de 159 KB, así que los
+`remotePatterns` de `next.config.ts` están bien y Next puede bajarlas y
+re-encodarlas. En un navegador real salen en WebP o AVIF, bastante más livianas.
+
+## Si la sección no aparece
+
+En orden, lo que conviene mirar:
+
+1. Que `INSTAGRAM_TOKEN` e `INSTAGRAM_ACCOUNT_ID` estén cargadas en el entorno
+   correcto de Vercel y que el deploy sea posterior.
+2. `node tools/instagram.mjs`, que dice si el token sigue sirviendo.
+3. Los logs del servidor en Vercel: ante un error, `ultimasPublicaciones()` deja
+   ahí el motivo que devolvió Meta.

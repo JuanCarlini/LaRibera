@@ -161,12 +161,32 @@ una petición de prueba devolvió 200 y un JPEG de 159 KB, así que los
 `remotePatterns` de `next.config.ts` están bien y Next puede bajarlas y
 re-encodarlas. En un navegador real salen en WebP o AVIF, bastante más livianas.
 
+## El token no puede ser "Sensitive" en Vercel
+
+La portada se prerenderiza durante el build, así que el token tiene que estar
+disponible **en el build**, no sólo en runtime. Las variables de tipo
+**Sensitive** de Vercel no se exponen al build: con ese tipo,
+`ultimasPublicaciones()` no encuentra el token, devuelve una lista vacía y la
+sección desaparece sin dejar ningún error en los logs —sale por la rama "falta
+el token" antes de llamar a la API—. Cuesta de diagnosticar justamente porque
+no falla: degrada en silencio.
+
+`INSTAGRAM_TOKEN` va como **Encrypted**, igual que
+`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. Vercel no deja cambiarle el tipo a una
+variable que ya es Sensitive: hay que volver a crearla.
+
+Y al cargarla o cambiarla, **no alcanza con un redeploy**: hereda la
+configuración del deployment original. Hay que disparar un deploy nuevo desde
+git para que el build tome los valores actuales.
+
 ## Si la sección no aparece
 
 En orden, lo que conviene mirar:
 
-1. Que `INSTAGRAM_TOKEN` e `INSTAGRAM_ACCOUNT_ID` estén cargadas en el entorno
-   correcto de Vercel y que el deploy sea posterior.
-2. `node tools/instagram.mjs`, que dice si el token sigue sirviendo.
-3. Los logs del servidor en Vercel: ante un error, `ultimasPublicaciones()` deja
-   ahí el motivo que devolvió Meta.
+1. Que `INSTAGRAM_TOKEN` esté como **Encrypted** y no como Sensitive, y que
+   junto con `INSTAGRAM_ACCOUNT_ID` esté en el entorno correcto.
+2. Que el deploy sea un build nuevo posterior al cambio, no un redeploy.
+3. `node tools/instagram.mjs`, que dice si el token sigue sirviendo.
+4. Los logs del build en Vercel: si la API falló, `ultimasPublicaciones()` deja
+   ahí el motivo que devolvió Meta. Si no hay ningún error, el problema es que
+   el token no llegó.

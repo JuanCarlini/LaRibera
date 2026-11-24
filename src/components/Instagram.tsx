@@ -49,12 +49,18 @@ export async function Instagram() {
                 data-umami-event="instagram-post"
                 className="group relative block aspect-square overflow-hidden rounded-xl bg-verde-900"
               >
+                {/* Medidas fijas en lugar de `fill`: la pieza es cuadrada y
+                    siempre se ve chica, así que no hace falta que el navegador
+                    resuelva el tamaño ni que Vercel prepare las diez variantes
+                    del srcset. Con un solo tamaño pedido, la grilla entra sin
+                    trabar la pestaña. */}
                 <Image
                   src={p.portada}
                   alt={p.alt}
-                  fill
-                  sizes="(min-width: 768px) 23vw, 45vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  width={400}
+                  height={400}
+                  quality={70}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
                 {/* Velo sólo en hover: sobre la foto en reposo restaría luz a

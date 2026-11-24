@@ -125,8 +125,6 @@ export const instagram = {
   bajada:
     "Lo que publicamos en Instagram: el loteo como está hoy, sin renders de por medio.",
   cta: "Seguinos en Instagram",
-  // TODO: confirmar el usuario con el cliente. Se dedujo del dominio y del
-  // mail (lariberavgg), pero nadie lo verificó contra la cuenta real.
   usuario: "lariberavgg",
   get perfil() {
     return `https://www.instagram.com/${this.usuario}/`;

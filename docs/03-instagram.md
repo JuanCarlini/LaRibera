@@ -150,8 +150,6 @@ plan Hobby conviene no bajar ese número sin rehacer la cuenta de arriba.
 
 ## Pendiente
 
-- Confirmar el usuario de la cuenta. En `site.ts` figura `lariberavgg`, deducido
-  del dominio y del mail, pero nadie lo verificó contra la cuenta real.
 - Probar contra la API de verdad. El layout se verificó con datos de muestra; la
   forma de la respuesta y el paso de las imágenes del CDN por `next/image` no se
   pudieron probar sin un token.

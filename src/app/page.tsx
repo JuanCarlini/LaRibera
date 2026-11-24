@@ -5,7 +5,6 @@ import { Ticker } from "@/components/Ticker";
 import { Servicios } from "@/components/Servicios";
 import { Ubicacion } from "@/components/Ubicacion";
 import { Vida } from "@/components/Vida";
-import { Instagram } from "@/components/Instagram";
 import { Financiacion } from "@/components/Financiacion";
 import { Actores } from "@/components/Actores";
 import { Contacto } from "@/components/Contacto";
@@ -24,7 +23,6 @@ export default function Home() {
         <Proyecto />
         <Servicios />
         <Ubicacion />
-        <Instagram />
         <Vida />
         <Actores />
         <Contacto />

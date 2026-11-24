@@ -59,7 +59,6 @@ export async function Instagram() {
                   alt={p.alt}
                   width={400}
                   height={400}
-                  quality={70}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
